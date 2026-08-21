@@ -1,0 +1,60 @@
+stages:
+  - build
+  - package
+
+variables:
+  PACKAGE_NAME: "package-manager"
+
+build:cfe:
+  stage: build
+  parallel:
+    matrix:
+      - EXTENSION_NAME:
+          - "_ДемоПустоеРасширение"
+          - "_ДемоРасширение"
+  rules:
+    - if: $CI_COMMIT_TAG
+  tags:
+    - windows
+    - ones
+  script:
+    - |
+      $ErrorActionPreference = "Stop"
+      $cfeName = "$env:EXTENSION_NAME.cfe"
+      $cfePath = Join-Path "dist" $cfeName
+
+      # TODO: replace with the project build command that creates $cfePath.
+      if (-not (Test-Path $cfePath)) {
+        throw "CFE file not found: $cfePath"
+      }
+  artifacts:
+    paths:
+      - "dist/*.cfe"
+    expire_in: 1 day
+
+package:gitlab:
+  stage: package
+  parallel:
+    matrix:
+      - EXTENSION_NAME:
+          - "_ДемоПустоеРасширение"
+          - "_ДемоРасширение"
+  rules:
+    - if: $CI_COMMIT_TAG
+  tags:
+    - windows
+    - ones
+  needs:
+    - job: build:cfe
+      artifacts: true
+  script:
+    - |
+      $ErrorActionPreference = "Stop"
+      $cfeName = "$env:EXTENSION_NAME.cfe"
+      $cfePath = Join-Path "dist" $cfeName
+      $packageUrl = "$env:CI_API_V4_URL/projects/$env:CI_PROJECT_ID/packages/generic/$env:PACKAGE_NAME/$env:CI_COMMIT_TAG/$cfeName"
+
+      curl.exe --fail `
+        --header "JOB-TOKEN: $env:CI_JOB_TOKEN" `
+        --upload-file "$cfePath" `
+        "$packageUrl"

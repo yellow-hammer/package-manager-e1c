@@ -1,0 +1,953 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<AutoSaveDataInSettings>Use</AutoSaveDataInSettings>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
+		<Autofill>false</Autofill>
+	</AutoCommandBar>
+	<Events>
+		<Event name="OnOpen">ПриОткрытии</Event>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
+		<Event name="OnClose">ПриЗакрытии</Event>
+	</Events>
+	<ChildItems>
+		<UsualGroup name="ГруппаСписки" id="147">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Группа1</v8:content>
+				</v8:item>
+			</Title>
+			<Group>AlwaysHorizontal</Group>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="ГруппаСпискиРасширеннаяПодсказка" id="148"/>
+			<ChildItems>
+				<Table name="Категории" id="131">
+					<Representation>List</Representation>
+					<CommandBarLocation>None</CommandBarLocation>
+					<ReadOnly>true</ReadOnly>
+					<SkipOnInput>false</SkipOnInput>
+					<ChangeRowSet>false</ChangeRowSet>
+					<ChangeRowOrder>false</ChangeRowOrder>
+					<Width>27</Width>
+					<Header>false</Header>
+					<InitialTreeView>ExpandTopLevel</InitialTreeView>
+					<DataPath>Категории</DataPath>
+					<RowFilter xsi:nil="true"/>
+					<ContextMenu name="КатегорииКонтекстноеМеню" id="133"/>
+					<AutoCommandBar name="КатегорииКоманднаяПанель" id="132"/>
+					<ExtendedTooltip name="КатегорииРасширеннаяПодсказка" id="134"/>
+					<SearchStringAddition name="КатегорииСтрокаПоиска" id="135">
+						<AdditionSource>
+							<Item>Категории</Item>
+							<Type>SearchStringRepresentation</Type>
+						</AdditionSource>
+						<ContextMenu name="КатегорииСтрокаПоискаКонтекстноеМеню" id="136"/>
+						<ExtendedTooltip name="КатегорииСтрокаПоискаРасширеннаяПодсказка" id="137"/>
+					</SearchStringAddition>
+					<ViewStatusAddition name="КатегорииСостояниеПросмотра" id="141">
+						<AdditionSource>
+							<Item>Категории</Item>
+							<Type>ViewStatusRepresentation</Type>
+						</AdditionSource>
+						<ContextMenu name="КатегорииСостояниеПросмотраКонтекстноеМеню" id="142"/>
+						<ExtendedTooltip name="КатегорииСостояниеПросмотраРасширеннаяПодсказка" id="143"/>
+					</ViewStatusAddition>
+					<SearchControlAddition name="КатегорииУправлениеПоиском" id="138">
+						<AdditionSource>
+							<Item>Категории</Item>
+							<Type>SearchControl</Type>
+						</AdditionSource>
+						<ContextMenu name="КатегорииУправлениеПоискомКонтекстноеМеню" id="139"/>
+						<ExtendedTooltip name="КатегорииУправлениеПоискомРасширеннаяПодсказка" id="140"/>
+					</SearchControlAddition>
+					<Events>
+						<Event name="OnActivateRow">РазделыПриАктивизацииСтроки</Event>
+					</Events>
+					<ChildItems>
+						<InputField name="КатегорииНаименование" id="144">
+							<DataPath>Категории.Наименование</DataPath>
+							<ContextMenu name="КатегорииНаименованиеКонтекстноеМеню" id="145"/>
+							<ExtendedTooltip name="КатегорииНаименованиеРасширеннаяПодсказка" id="146"/>
+						</InputField>
+					</ChildItems>
+				</Table>
+				<UsualGroup name="ГруппаПакетыВерсии" id="174">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Группа1</v8:content>
+						</v8:item>
+					</Title>
+					<Group>Vertical</Group>
+					<Representation>None</Representation>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="ГруппаПакетыВерсииРасширеннаяПодсказка" id="175"/>
+					<ChildItems>
+						<UsualGroup name="Группа2" id="198">
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Группа2</v8:content>
+								</v8:item>
+							</Title>
+							<Group>AlwaysHorizontal</Group>
+							<Representation>None</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="Группа2РасширеннаяПодсказка" id="199"/>
+							<ChildItems>
+								<RadioButtonField name="ФильтрВерсий" id="193">
+									<DataPath>ФильтрВерсий</DataPath>
+									<RadioButtonType>Tumbler</RadioButtonType>
+									<ChoiceList>
+										<xr:Item>
+											<xr:Presentation/>
+											<xr:CheckState>0</xr:CheckState>
+											<xr:Value xsi:type="FormChoiceListDesTimeValue">
+												<Presentation>
+													<v8:item>
+														<v8:lang>ru</v8:lang>
+														<v8:content>Стабильные</v8:content>
+													</v8:item>
+												</Presentation>
+												<Value xsi:type="xs:string">stable</Value>
+											</xr:Value>
+										</xr:Item>
+										<xr:Item>
+											<xr:Presentation/>
+											<xr:CheckState>0</xr:CheckState>
+											<xr:Value xsi:type="FormChoiceListDesTimeValue">
+												<Presentation>
+													<v8:item>
+														<v8:lang>ru</v8:lang>
+														<v8:content>Предрелизные</v8:content>
+													</v8:item>
+												</Presentation>
+												<Value xsi:type="xs:string">rc</Value>
+											</xr:Value>
+										</xr:Item>
+										<xr:Item>
+											<xr:Presentation/>
+											<xr:CheckState>0</xr:CheckState>
+											<xr:Value xsi:type="FormChoiceListDesTimeValue">
+												<Presentation>
+													<v8:item>
+														<v8:lang>ru</v8:lang>
+														<v8:content>В разработке</v8:content>
+													</v8:item>
+												</Presentation>
+												<Value xsi:type="xs:string">dev</Value>
+											</xr:Value>
+										</xr:Item>
+										<xr:Item>
+											<xr:Presentation/>
+											<xr:CheckState>0</xr:CheckState>
+											<xr:Value xsi:type="FormChoiceListDesTimeValue">
+												<Presentation>
+													<v8:item>
+														<v8:lang>ru</v8:lang>
+														<v8:content>Все</v8:content>
+													</v8:item>
+												</Presentation>
+												<Value xsi:type="xs:string">Все</Value>
+											</xr:Value>
+										</xr:Item>
+									</ChoiceList>
+									<ContextMenu name="ФильтрВерсийКонтекстноеМеню" id="194"/>
+									<ExtendedTooltip name="ФильтрВерсийРасширеннаяПодсказка" id="195"/>
+								</RadioButtonField>
+								<CommandBar name="Группа1" id="196">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Группа1</v8:content>
+										</v8:item>
+									</Title>
+									<ExtendedTooltip name="Группа1РасширеннаяПодсказка" id="197"/>
+									<ChildItems>
+										<Button name="ПакетыОбновить" id="31">
+											<Type>CommandBarButton</Type>
+											<CommandName>Form.Command.Обновить</CommandName>
+											<Title>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Заполнить</v8:content>
+												</v8:item>
+											</Title>
+											<ExtendedTooltip name="ПакетыОбновитьРасширеннаяПодсказка" id="32"/>
+										</Button>
+										<Button name="ПакетыОткрытьНастройки" id="179">
+											<Type>CommandBarButton</Type>
+											<CommandName>Form.Command.ОткрытьНастройки</CommandName>
+											<Title>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Настройки</v8:content>
+												</v8:item>
+											</Title>
+											<ExtendedTooltip name="ПакетыОткрытьНастройкиРасширеннаяПодсказка" id="180"/>
+										</Button>
+										<ButtonGroup name="КомандыФормы" id="23">
+											<Title>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Пакеты группа1</v8:content>
+												</v8:item>
+											</Title>
+											<CommandSource>Form</CommandSource>
+											<ExtendedTooltip name="КомандыФормыРасширеннаяПодсказка" id="24"/>
+										</ButtonGroup>
+									</ChildItems>
+								</CommandBar>
+							</ChildItems>
+						</UsualGroup>
+						<Table name="Пакеты" id="1">
+							<Representation>List</Representation>
+							<DataPath>Пакеты</DataPath>
+							<CommandSet>
+								<ExcludedCommand>Add</ExcludedCommand>
+								<ExcludedCommand>Change</ExcludedCommand>
+								<ExcludedCommand>Copy</ExcludedCommand>
+								<ExcludedCommand>Delete</ExcludedCommand>
+								<ExcludedCommand>EndEdit</ExcludedCommand>
+								<ExcludedCommand>MoveDown</ExcludedCommand>
+								<ExcludedCommand>MoveUp</ExcludedCommand>
+								<ExcludedCommand>ShowRowRearrangement</ExcludedCommand>
+							</CommandSet>
+							<RowFilter xsi:nil="true"/>
+							<ContextMenu name="ПакетыКонтекстноеМеню" id="3"/>
+							<AutoCommandBar name="ПакетыКоманднаяПанель" id="2">
+								<Autofill>false</Autofill>
+								<ChildItems>
+									<Button name="ПакетыОтметитьСтроки" id="65">
+										<Type>CommandBarButton</Type>
+										<Visible>false</Visible>
+										<CommandName>Form.Command.ОтметитьСтроки</CommandName>
+										<ExtendedTooltip name="ПакетыОтметитьСтрокиРасширеннаяПодсказка" id="66"/>
+									</Button>
+									<Button name="ПакетыСнятьОтметкуСтрок" id="67">
+										<Type>CommandBarButton</Type>
+										<Visible>false</Visible>
+										<CommandName>Form.Command.СнятьОтметкуСтрок</CommandName>
+										<ExtendedTooltip name="ПакетыСнятьОтметкуСтрокРасширеннаяПодсказка" id="68"/>
+									</Button>
+								</ChildItems>
+							</AutoCommandBar>
+							<ExtendedTooltip name="ПакетыРасширеннаяПодсказка" id="4"/>
+							<SearchStringAddition name="ПакетыСтрокаПоиска" id="5">
+								<AdditionSource>
+									<Item>Пакеты</Item>
+									<Type>SearchStringRepresentation</Type>
+								</AdditionSource>
+								<ContextMenu name="ПакетыСтрокаПоискаКонтекстноеМеню" id="6"/>
+								<ExtendedTooltip name="ПакетыСтрокаПоискаРасширеннаяПодсказка" id="7"/>
+							</SearchStringAddition>
+							<ViewStatusAddition name="ПакетыСостояниеПросмотра" id="11">
+								<AdditionSource>
+									<Item>Пакеты</Item>
+									<Type>ViewStatusRepresentation</Type>
+								</AdditionSource>
+								<ContextMenu name="ПакетыСостояниеПросмотраКонтекстноеМеню" id="12"/>
+								<ExtendedTooltip name="ПакетыСостояниеПросмотраРасширеннаяПодсказка" id="13"/>
+							</ViewStatusAddition>
+							<SearchControlAddition name="ПакетыУправлениеПоиском" id="8">
+								<AdditionSource>
+									<Item>Пакеты</Item>
+									<Type>SearchControl</Type>
+								</AdditionSource>
+								<ContextMenu name="ПакетыУправлениеПоискомКонтекстноеМеню" id="9"/>
+								<ExtendedTooltip name="ПакетыУправлениеПоискомРасширеннаяПодсказка" id="10"/>
+							</SearchControlAddition>
+							<Events>
+								<Event name="OnActivateRow">ПакетыПриАктивизацииСтроки</Event>
+							</Events>
+							<ChildItems>
+								<PictureField name="ПакетыЭтоГруппа" id="200">
+									<DataPath>Пакеты.ЭтоГруппа</DataPath>
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Группа пакетов</v8:content>
+										</v8:item>
+									</Title>
+									<TitleLocation>None</TitleLocation>
+									<ToolTip>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Группа пакетов поставляемых для разных систем</v8:content>
+										</v8:item>
+									</ToolTip>
+									<Width>2</Width>
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<MaxWidth>2</MaxWidth>
+									<Border width="0">
+										<v8ui:style xsi:type="v8ui:ControlBorderType">Single</v8ui:style>
+									</Border>
+									<ContextMenu name="ПакетыЭтоГруппаКонтекстноеМеню" id="201"/>
+									<ExtendedTooltip name="ПакетыЭтоГруппаРасширеннаяПодсказка" id="202"/>
+								</PictureField>
+								<PictureField name="ПакетыТребуетсяПерезагрузка" id="53">
+									<DataPath>Пакеты.ТребуетсяПерезагрузка</DataPath>
+									<TitleLocation>None</TitleLocation>
+									<ToolTip>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Требуется перезапуск клиента. При изменении структуры БД потретуется монопольный доступ.</v8:content>
+										</v8:item>
+									</ToolTip>
+									<Width>2</Width>
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<MaxWidth>2</MaxWidth>
+									<Border width="0">
+										<v8ui:style xsi:type="v8ui:ControlBorderType">Single</v8ui:style>
+									</Border>
+									<ContextMenu name="ПакетыТребуетсяПерезагрузкаКонтекстноеМеню" id="54"/>
+									<ExtendedTooltip name="ПакетыТребуетсяПерезагрузкаРасширеннаяПодсказка" id="55"/>
+								</PictureField>
+								<InputField name="ПакетыИмя" id="14">
+									<DataPath>Пакеты.Имя</DataPath>
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Пакет</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="ПакетыИмяКонтекстноеМеню" id="15"/>
+									<ExtendedTooltip name="ПакетыИмяРасширеннаяПодсказка" id="16"/>
+								</InputField>
+								<InputField name="ПакетыУстановленнаяВерсия" id="44">
+									<DataPath>Пакеты.УстановленнаяВерсия</DataPath>
+									<ContextMenu name="ПакетыУстановленнаяВерсияКонтекстноеМеню" id="45"/>
+									<ExtendedTooltip name="ПакетыУстановленнаяВерсияРасширеннаяПодсказка" id="46"/>
+								</InputField>
+								<InputField name="ПакетыОписание" id="62">
+									<DataPath>Пакеты.Описание</DataPath>
+									<ContextMenu name="ПакетыОписаниеКонтекстноеМеню" id="63"/>
+									<ExtendedTooltip name="ПакетыОписаниеРасширеннаяПодсказка" id="64"/>
+								</InputField>
+								<CheckBoxField name="ПакетыИндивидуальный" id="50">
+									<DataPath>Пакеты.ЭтоГруппа</DataPath>
+									<UserVisible>
+										<xr:Common>false</xr:Common>
+									</UserVisible>
+									<CheckBoxType>Auto</CheckBoxType>
+									<ContextMenu name="ПакетыИндивидуальныйКонтекстноеМеню" id="51"/>
+									<ExtendedTooltip name="ПакетыИндивидуальныйРасширеннаяПодсказка" id="52"/>
+								</CheckBoxField>
+								<InputField name="ПакетыМетодОбработчик" id="41">
+									<DataPath>Пакеты.МетодОбработчик</DataPath>
+									<UserVisible>
+										<xr:Common>false</xr:Common>
+									</UserVisible>
+									<ContextMenu name="ПакетыМетодОбработчикКонтекстноеМеню" id="42"/>
+									<ExtendedTooltip name="ПакетыМетодОбработчикРасширеннаяПодсказка" id="43"/>
+								</InputField>
+								<InputField name="ПакетыПорядокПрименения" id="69">
+									<DataPath>Пакеты.ПорядокПрименения</DataPath>
+									<UserVisible>
+										<xr:Common>false</xr:Common>
+									</UserVisible>
+									<ContextMenu name="ПакетыПорядокПримененияКонтекстноеМеню" id="70"/>
+									<ExtendedTooltip name="ПакетыПорядокПримененияРасширеннаяПодсказка" id="71"/>
+								</InputField>
+							</ChildItems>
+						</Table>
+						<Table name="Версии" id="149">
+							<Representation>List</Representation>
+							<SelectionMode>SingleRow</SelectionMode>
+							<RowSelectionMode>Row</RowSelectionMode>
+							<DataPath>Версии</DataPath>
+							<RowFilter xsi:nil="true"/>
+							<ContextMenu name="ВерсииКонтекстноеМеню" id="151"/>
+							<AutoCommandBar name="ВерсииКоманднаяПанель" id="150">
+								<Autofill>false</Autofill>
+								<ChildItems>
+									<Button name="ПакетыСкачать" id="33">
+										<Type>CommandBarButton</Type>
+										<CommandName>Form.Command.Скачать</CommandName>
+										<ExtendedTooltip name="ПакетыСкачатьРасширеннаяПодсказка" id="34"/>
+									</Button>
+								</ChildItems>
+							</AutoCommandBar>
+							<ExtendedTooltip name="ВерсииРасширеннаяПодсказка" id="152"/>
+							<SearchStringAddition name="ВерсииСтрокаПоиска" id="153">
+								<AdditionSource>
+									<Item>Версии</Item>
+									<Type>SearchStringRepresentation</Type>
+								</AdditionSource>
+								<ContextMenu name="ВерсииСтрокаПоискаКонтекстноеМеню" id="154"/>
+								<ExtendedTooltip name="ВерсииСтрокаПоискаРасширеннаяПодсказка" id="155"/>
+							</SearchStringAddition>
+							<ViewStatusAddition name="ВерсииСостояниеПросмотра" id="159">
+								<AdditionSource>
+									<Item>Версии</Item>
+									<Type>ViewStatusRepresentation</Type>
+								</AdditionSource>
+								<ContextMenu name="ВерсииСостояниеПросмотраКонтекстноеМеню" id="160"/>
+								<ExtendedTooltip name="ВерсииСостояниеПросмотраРасширеннаяПодсказка" id="161"/>
+							</ViewStatusAddition>
+							<SearchControlAddition name="ВерсииУправлениеПоиском" id="156">
+								<AdditionSource>
+									<Item>Версии</Item>
+									<Type>SearchControl</Type>
+								</AdditionSource>
+								<ContextMenu name="ВерсииУправлениеПоискомКонтекстноеМеню" id="157"/>
+								<ExtendedTooltip name="ВерсииУправлениеПоискомРасширеннаяПодсказка" id="158"/>
+							</SearchControlAddition>
+							<ChildItems>
+								<InputField name="ВерсииНомер" id="162">
+									<DataPath>Версии.Номер</DataPath>
+									<ContextMenu name="ВерсииНомерКонтекстноеМеню" id="163"/>
+									<ExtendedTooltip name="ВерсииНомерРасширеннаяПодсказка" id="164"/>
+								</InputField>
+								<InputField name="ВерсииИд" id="165">
+									<DataPath>Версии.Ид</DataPath>
+									<UserVisible>
+										<xr:Common>false</xr:Common>
+									</UserVisible>
+									<ContextMenu name="ВерсииИдКонтекстноеМеню" id="166"/>
+									<ExtendedTooltip name="ВерсииИдРасширеннаяПодсказка" id="167"/>
+								</InputField>
+								<InputField name="ВерсииДатаСоздания" id="168">
+									<DataPath>Версии.ДатаСоздания</DataPath>
+									<ContextMenu name="ВерсииДатаСозданияКонтекстноеМеню" id="169"/>
+									<ExtendedTooltip name="ВерсииДатаСозданияРасширеннаяПодсказка" id="170"/>
+								</InputField>
+								<InputField name="ВерсииИмяПакета" id="176">
+									<DataPath>Версии.ИмяПакета</DataPath>
+									<UserVisible>
+										<xr:Common>false</xr:Common>
+									</UserVisible>
+									<ContextMenu name="ВерсииИмяПакетаКонтекстноеМеню" id="177"/>
+									<ExtendedTooltip name="ВерсииИмяПакетаРасширеннаяПодсказка" id="178"/>
+								</InputField>
+								<InputField name="ВерсииИмяФайла" id="184">
+									<DataPath>Версии.ИмяФайла</DataPath>
+									<ContextMenu name="ВерсииИмяФайлаКонтекстноеМеню" id="185"/>
+									<ExtendedTooltip name="ВерсииИмяФайлаРасширеннаяПодсказка" id="186"/>
+								</InputField>
+							</ChildItems>
+						</Table>
+						<UsualGroup name="ГруппаЛегенда" id="214">
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Легенда</v8:content>
+								</v8:item>
+							</Title>
+							<Behavior>Collapsible</Behavior>
+							<CollapsedRepresentationTitle>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Легенда</v8:content>
+								</v8:item>
+							</CollapsedRepresentationTitle>
+							<Collapsed>true</Collapsed>
+							<ExtendedTooltip name="ГруппаЛегендаРасширеннаяПодсказка" id="215"/>
+							<ChildItems>
+								<UsualGroup name="Группа4" id="216">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Группа4</v8:content>
+										</v8:item>
+									</Title>
+									<Group>Vertical</Group>
+									<Representation>None</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="Группа4РасширеннаяПодсказка" id="217"/>
+									<ChildItems>
+										<PictureDecoration name="Декорация1" id="218">
+											<Title formatted="false">
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Декорация1</v8:content>
+												</v8:item>
+											</Title>
+											<ToolTip>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Группа пакетов поставляемых для разных систем.</v8:content>
+												</v8:item>
+											</ToolTip>
+											<ToolTipRepresentation>ShowRight</ToolTipRepresentation>
+											<ContextMenu name="Декорация1КонтекстноеМеню" id="219"/>
+											<ExtendedTooltip name="Декорация1РасширеннаяПодсказка" id="220"/>
+										</PictureDecoration>
+										<PictureDecoration name="Декорация2" id="221">
+											<Title formatted="false">
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Групповой пакет</v8:content>
+												</v8:item>
+											</Title>
+											<ToolTip>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>После установки пакета требуется перезапуск клиента. При установке пакета с расширением требущим изменение структуры базы данных потретуется монопольный доступ.</v8:content>
+												</v8:item>
+											</ToolTip>
+											<ToolTipRepresentation>ShowRight</ToolTipRepresentation>
+											<ContextMenu name="Декорация2КонтекстноеМеню" id="222"/>
+											<ExtendedTooltip name="Декорация2РасширеннаяПодсказка" id="223"/>
+										</PictureDecoration>
+									</ChildItems>
+								</UsualGroup>
+							</ChildItems>
+						</UsualGroup>
+						<UsualGroup name="ГруппаДекорацияЗаполнитеИдентификаторСистемы" id="206">
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Группа3</v8:content>
+								</v8:item>
+							</Title>
+							<Group>AlwaysHorizontal</Group>
+							<VerticalAlign>Center</VerticalAlign>
+							<Representation>None</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="ГруппаДекорацияЗаполнитеИдентификаторСистемыРасширеннаяПодсказка" id="207"/>
+							<ChildItems>
+								<PictureDecoration name="Декорация1Картинка" id="208">
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Декорация1 картинка</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="Декорация1КартинкаКонтекстноеМеню" id="209"/>
+									<ExtendedTooltip name="Декорация1КартинкаРасширеннаяПодсказка" id="210"/>
+								</PictureDecoration>
+								<LabelDecoration name="ДекорацияЗаполнитеИдентификаторСистемы" id="203">
+									<Width>100</Width>
+									<Title formatted="true">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>&lt;colorstyle -46&gt;Заполните&lt;/&gt;&lt;colorstyle -46&gt; &lt;/&gt;&lt;link ОткрытьНастройки&gt;&lt;colorstyle -46&gt;идентификатор&lt;/&gt;&lt;colorstyle -46&gt; &lt;/&gt;&lt;colorstyle -46&gt;системы&lt;/&gt;&lt;/&gt;&lt;colorstyle -46&gt;,&lt;/&gt;&lt;colorstyle -46&gt; &lt;/&gt;&lt;colorstyle -46&gt;чтобы&lt;/&gt;&lt;colorstyle -46&gt; &lt;/&gt;&lt;colorstyle -46&gt;отобразились &lt;/&gt;&lt;colorstyle -46&gt;персонифицированные&lt;/&gt;&lt;colorstyle -46&gt; &lt;/&gt;&lt;colorstyle -46&gt;пакеты.&lt;/&gt;</v8:content>
+										</v8:item>
+									</Title>
+									<HorizontalAlign>Auto</HorizontalAlign>
+									<ContextMenu name="ДекорацияЗаполнитеИдентификаторСистемыКонтекстноеМеню" id="204"/>
+									<ExtendedTooltip name="ДекорацияЗаполнитеИдентификаторСистемыРасширеннаяПодсказка" id="205"/>
+									<Events>
+										<Event name="Click">ДекорацияЗаполнитеИдентификаторСистемыНажатие</Event>
+										<Event name="URLProcessing">ДекорацияЗаполнитеИдентификаторСистемыОбработкаНавигационнойСсылки</Event>
+									</Events>
+								</LabelDecoration>
+							</ChildItems>
+						</UsualGroup>
+					</ChildItems>
+				</UsualGroup>
+			</ChildItems>
+		</UsualGroup>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Объект" id="1">
+			<Type>
+				<v8:Type>cfg:DataProcessorObject.пм_МенеджерПакетов</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+		</Attribute>
+		<Attribute name="Пакеты" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Пакеты</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>v8:ValueTable</v8:Type>
+			</Type>
+			<Columns>
+				<Column name="Имя" id="3">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Имя</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>100</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="МетодОбработчик" id="8">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Метод обработчик</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>300</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="ЭтоГруппа" id="13">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Это группа</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
+				<Column name="УстановленнаяВерсия" id="16">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Установленная версия</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>150</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="ТребуетсяПерезагрузка" id="17">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
+				<Column name="Описание" id="19">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Описание</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>250</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="ПорядокПрименения" id="20">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Порядок применения</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>10</v8:Digits>
+							<v8:FractionDigits>0</v8:FractionDigits>
+							<v8:AllowedSign>Nonnegative</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="Категория" id="39">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Категория</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+			</Columns>
+		</Attribute>
+		<Attribute name="ИдентификаторСистемы" id="9">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Идентификатор системы</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>50</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ПрефиксИндивидуальногоПакета" id="10">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>50</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ПрефиксОбщегоПакета" id="11">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>50</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="Версии" id="22">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Версии</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>v8:ValueTable</v8:Type>
+			</Type>
+			<Columns>
+				<Column name="Номер" id="24">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Номер</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>150</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="Ид" id="25">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Ид</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>20</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="ДатаСоздания" id="26">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Дата создания</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:dateTime</v8:Type>
+						<v8:DateQualifiers>
+							<v8:DateFractions>DateTime</v8:DateFractions>
+						</v8:DateQualifiers>
+					</Type>
+				</Column>
+				<Column name="ИмяПакета" id="38">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Имя пакета</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>100</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="ИмяФайла" id="42">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Имя файла</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>200</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+			</Columns>
+		</Attribute>
+		<Attribute name="Категории" id="36">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Категории</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>v8:ValueTable</v8:Type>
+			</Type>
+			<Columns>
+				<Column name="Наименование" id="37">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Наименование</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>100</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+			</Columns>
+		</Attribute>
+		<Attribute name="ЛимитВерсий" id="40">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Количество выводимых версий пакета</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>2</v8:Digits>
+					<v8:FractionDigits>0</v8:FractionDigits>
+					<v8:AllowedSign>Nonnegative</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ФильтрВерсий" id="45">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Фильтр версий</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>20</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="URLСервера" id="46">
+			<Title><v8:item><v8:lang>ru</v8:lang><v8:content>URL сервера</v8:content></v8:item></Title>
+			<Type><v8:Type>xs:string</v8:Type><v8:StringQualifiers><v8:Length>500</v8:Length><v8:AllowedLength>Variable</v8:AllowedLength></v8:StringQualifiers></Type>
+		</Attribute>
+		<Attribute name="ПутьПроекта" id="47">
+			<Title><v8:item><v8:lang>ru</v8:lang><v8:content>Путь проекта</v8:content></v8:item></Title>
+			<Type><v8:Type>xs:string</v8:Type><v8:StringQualifiers><v8:Length>500</v8:Length><v8:AllowedLength>Variable</v8:AllowedLength></v8:StringQualifiers></Type>
+		</Attribute>
+		<Attribute name="IDПроекта" id="48">
+			<Title><v8:item><v8:lang>ru</v8:lang><v8:content>ID проекта</v8:content></v8:item></Title>
+			<Type><v8:Type>xs:decimal</v8:Type><v8:NumberQualifiers><v8:Digits>10</v8:Digits><v8:FractionDigits>0</v8:FractionDigits><v8:AllowedSign>Nonnegative</v8:AllowedSign></v8:NumberQualifiers></Type>
+		</Attribute>
+		<Attribute name="ИмяПакета" id="49">
+			<Title><v8:item><v8:lang>ru</v8:lang><v8:content>Имя пакета</v8:content></v8:item></Title>
+			<Type><v8:Type>xs:string</v8:Type><v8:StringQualifiers><v8:Length>150</v8:Length><v8:AllowedLength>Variable</v8:AllowedLength></v8:StringQualifiers></Type>
+		</Attribute>
+		<Attribute name="ВерсияПакета" id="50">
+			<Title><v8:item><v8:lang>ru</v8:lang><v8:content>Версия пакета</v8:content></v8:item></Title>
+			<Type><v8:Type>xs:string</v8:Type><v8:StringQualifiers><v8:Length>150</v8:Length><v8:AllowedLength>Variable</v8:AllowedLength></v8:StringQualifiers></Type>
+		</Attribute>
+		<Attribute name="ИмяФайлаПакета" id="51">
+			<Title><v8:item><v8:lang>ru</v8:lang><v8:content>Имя файла пакета</v8:content></v8:item></Title>
+			<Type><v8:Type>xs:string</v8:Type><v8:StringQualifiers><v8:Length>255</v8:Length><v8:AllowedLength>Variable</v8:AllowedLength></v8:StringQualifiers></Type>
+		</Attribute>
+		<Attribute name="ИмяРасширенияВИБ" id="52">
+			<Title><v8:item><v8:lang>ru</v8:lang><v8:content>Имя расширения в ИБ</v8:content></v8:item></Title>
+			<Type><v8:Type>xs:string</v8:Type><v8:StringQualifiers><v8:Length>150</v8:Length><v8:AllowedLength>Variable</v8:AllowedLength></v8:StringQualifiers></Type>
+		</Attribute>
+		<Attribute name="ТокенДоступа" id="53">
+			<Title><v8:item><v8:lang>ru</v8:lang><v8:content>Токен доступа</v8:content></v8:item></Title>
+			<Type><v8:Type>xs:string</v8:Type><v8:StringQualifiers><v8:Length>500</v8:Length><v8:AllowedLength>Variable</v8:AllowedLength></v8:StringQualifiers></Type>
+		</Attribute>
+	</Attributes>
+	<Commands>
+		<Command name="Обновить" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Обновить список пакетов</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Заполнить список пакетов</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>Обновить</Action>
+			<Representation>TextPicture</Representation>
+		</Command>
+		<Command name="Скачать" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Скачать</v8:content>
+				</v8:item>
+			</Title>
+			<Action>Скачать</Action>
+			<Representation>TextPicture</Representation>
+		</Command>
+		<Command name="ОтметитьСтроки" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Отметить строки</v8:content>
+				</v8:item>
+			</Title>
+			<Picture>
+				<xr:Ref>StdPicture.CheckAll</xr:Ref>
+				<xr:LoadTransparent>true</xr:LoadTransparent>
+			</Picture>
+			<Action>ОтметитьСтроки</Action>
+			<Representation>Picture</Representation>
+		</Command>
+		<Command name="СнятьОтметкуСтрок" id="4">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Снять отметку строк</v8:content>
+				</v8:item>
+			</Title>
+			<Picture>
+				<xr:Ref>StdPicture.UncheckAll</xr:Ref>
+				<xr:LoadTransparent>true</xr:LoadTransparent>
+			</Picture>
+			<Action>СнятьОтметкуСтрок</Action>
+			<Representation>Picture</Representation>
+		</Command>
+		<Command name="ОткрытьНастройки" id="5">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Открыть настройки</v8:content>
+				</v8:item>
+			</Title>
+			<Picture>
+				<xr:Ref>StdPicture.Setting</xr:Ref>
+				<xr:LoadTransparent>true</xr:LoadTransparent>
+			</Picture>
+			<Action>ОткрытьНастройки</Action>
+			<Representation>TextPicture</Representation>
+		</Command>
+	</Commands>
+</Form>

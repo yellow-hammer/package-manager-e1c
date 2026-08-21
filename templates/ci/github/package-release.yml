@@ -1,0 +1,45 @@
+name: Publish package artifact
+
+on:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  contents: write
+
+env:
+  CFE_NAME: package-manager.cfe
+  CFE_PATH: dist/package-manager.cfe
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build CFE
+        run: |
+          # TODO: replace with your 1C build command.
+          test -f "${CFE_PATH}"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.CFE_NAME }}
+          path: ${{ env.CFE_PATH }}
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.CFE_NAME }}
+          path: dist
+
+      - name: Publish GitHub Release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.CFE_PATH }}
