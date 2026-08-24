@@ -8,12 +8,15 @@ allure-report/
 oscript_modules/
 
 ConfigDumpInfo.xml
-build
 out
 .scannerwork
-src\cf\ConfigDumpInfo.xml
 
 # Файлы отслеживания загрузки конфигурации
 src/cf/lastUploadedCommit.txt
 src/cf/lastUploadedConfigDumpInfo.xml
 objlist.txt
+
+# Движок YAxUnit - сторонний компонент, ставится командой
+# vrunner loadext + decompileext, см. tests/README.md. Если решите вендорить
+# (как это сделано в БСП), уберите строку ниже.
+tests/cfe/yaxunit/

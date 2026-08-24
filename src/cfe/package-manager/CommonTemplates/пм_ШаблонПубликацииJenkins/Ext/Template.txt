@@ -1,0 +1,39 @@
+﻿// Публикация .cfe в GitLab Generic Package Registry из Jenkins.
+// Плейсхолдеры @...@ подставляет обработка «Генератор шаблонов публикации».
+
+pipeline {
+    agent any
+
+    environment {
+        PACKAGE_NAME = '@PACKAGE_NAME@'
+        CFE_NAME = '@CFE_NAME@'
+        CFE_PATH = '@CFE_PATH@'
+        GITLAB_API_URL = credentials('gitlab-api-url')
+        GITLAB_PROJECT_ID = credentials('gitlab-project-id')
+        GITLAB_TOKEN = credentials('gitlab-package-token')
+    }
+
+    stages {
+        stage('Build CFE') {
+            steps {
+                // TODO: заменить на команду сборки .cfe вашего проекта.
+                sh 'test -f "${CFE_PATH}"'
+                archiveArtifacts artifacts: "${CFE_PATH}", fingerprint: true
+            }
+        }
+
+        stage('Publish GitLab Package') {
+            when {
+                buildingTag()
+            }
+            steps {
+                sh '''
+                    curl --fail \
+                      --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+                      --upload-file "${CFE_PATH}" \
+                      "${GITLAB_API_URL}/projects/${GITLAB_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${TAG_NAME}/${CFE_NAME}"
+                '''
+            }
+        }
+    }
+}

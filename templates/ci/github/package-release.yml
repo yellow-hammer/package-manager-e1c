@@ -1,3 +1,6 @@
+# Публикация .cfe как ассета GitHub Release.
+# Плейсхолдеры @...@ подставляет обработка «Генератор шаблонов публикации».
+
 name: Publish package artifact
 
 on:
@@ -9,8 +12,9 @@ permissions:
   contents: write
 
 env:
-  CFE_NAME: package-manager.cfe
-  CFE_PATH: dist/package-manager.cfe
+  PACKAGE_NAME: @PACKAGE_NAME@
+  CFE_NAME: @CFE_NAME@
+  CFE_PATH: @CFE_PATH@
 
 jobs:
   build:
@@ -20,7 +24,7 @@ jobs:
 
       - name: Build CFE
         run: |
-          # TODO: replace with your 1C build command.
+          # TODO: заменить на команду сборки .cfe вашего проекта.
           test -f "${CFE_PATH}"
 
       - name: Upload build artifact

@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Enum uuid="23a78d18-29c8-4a9e-9bb6-ac6f912b861b">
+		<InternalInfo>
+			<xr:GeneratedType name="EnumRef.пм_Провайдеры" category="Ref">
+				<xr:TypeId>d4205ca0-53b5-4adf-b37c-85fec898e2c6</xr:TypeId>
+				<xr:ValueId>c02f5a8c-2446-448b-acd7-6395bd700b38</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumManager.пм_Провайдеры" category="Manager">
+				<xr:TypeId>e2f5632b-61ae-4fe5-adf2-03ff75d10360</xr:TypeId>
+				<xr:ValueId>7dd78aec-2fe1-4648-98e3-da7ec56dea96</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumList.пм_Провайдеры" category="List">
+				<xr:TypeId>f5e68b40-0953-403e-ace1-faace2864abc</xr:TypeId>
+				<xr:ValueId>8be24e9d-23b7-48f7-8d3a-be74988b2cff</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<Name>пм_Провайдеры</Name>
+			<Synonym>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Провайдеры пакетов</v8:content>
+				</v8:item>
+			</Synonym>
+			<Comment/>
+			<UseStandardCommands>false</UseStandardCommands>
+			<Characteristics/>
+			<QuickChoice>true</QuickChoice>
+			<ChoiceMode>BothWays</ChoiceMode>
+			<DefaultListForm/>
+			<DefaultChoiceForm/>
+			<AuxiliaryListForm/>
+			<AuxiliaryChoiceForm/>
+			<ListPresentation/>
+			<ExtendedListPresentation/>
+			<Explanation/>
+			<ChoiceHistoryOnInput>Auto</ChoiceHistoryOnInput>
+		</Properties>
+		<ChildObjects>
+			<EnumValue uuid="ce420141-c024-41ef-9287-5737fc3a2290">
+				<Properties>
+					<Name>GitLab</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>GitLab</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment/>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="28a86b77-be5b-4184-a8c4-3ced7df55333">
+				<Properties>
+					<Name>GitHub</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>GitHub</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment/>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="159014db-bee6-4fde-b100-a725c13b0cb5">
+				<Properties>
+					<Name>Gitea</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Gitea</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment/>
+				</Properties>
+			</EnumValue>
+		</ChildObjects>
+	</Enum>
+</MetaDataObject>

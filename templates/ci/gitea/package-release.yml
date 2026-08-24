@@ -1,3 +1,7 @@
+# Публикация .cfe как ассета Gitea Release.
+# Плейсхолдеры @...@ подставляет обработка «Генератор шаблонов публикации».
+# Требуется secret GITEA_TOKEN с правом записи релизов.
+
 name: Publish package artifact
 
 on:
@@ -6,8 +10,9 @@ on:
       - "*"
 
 env:
-  CFE_NAME: package-manager.cfe
-  CFE_PATH: dist/package-manager.cfe
+  PACKAGE_NAME: @PACKAGE_NAME@
+  CFE_NAME: @CFE_NAME@
+  CFE_PATH: @CFE_PATH@
   GITEA_API_URL: https://gitea.example.com/api/v1
   GITEA_REPOSITORY: owner/repository
 
@@ -19,7 +24,7 @@ jobs:
 
       - name: Build CFE
         run: |
-          # TODO: replace with your 1C build command.
+          # TODO: заменить на команду сборки .cfe вашего проекта.
           test -f "${CFE_PATH}"
 
       - name: Create Gitea release
