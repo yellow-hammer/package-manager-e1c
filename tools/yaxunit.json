@@ -3,7 +3,7 @@
     "closeAfterTests": true,
     "filter": {
         "extensions": [
-            "package-manager"
+            "package-manager-tests"
         ],
         "modules": null,
         "suites": null,

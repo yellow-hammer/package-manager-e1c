@@ -21,26 +21,21 @@ oscript tasks/check-all.os
 ```
 
 Порядок внутри: формат исходников → модульные тесты → загрузка чистого
-решения → синтакс-контроль → сценарии. После модульных тестов база
-возвращается к поставочной сборке, поэтому синтакс-контроль и BDD проверяют
-ровно то, что уйдёт пользователю.
+решения → синтакс-контроль → сценарии. Модульные тесты грузят отдельное
+расширение `package-manager-tests`. После них `package-manager` снова
+берётся из `src`, поэтому синтакс-контроль и BDD проверяют ровно то,
+что уйдёт пользователю.
 
-## Почему тесты собираются в расширение решения
+## Где что лежит
 
-Расширение 1С видит конфигурацию и себя, но **не видит другие расширения** —
-ни при компиляции, ни через `Вычислить` в рантайме: для тестового расширения
-`Метаданные.ОбщиеМодули.Найти("пм_ВерсииПакетов")` возвращает `Неопределено`.
+| Каталог | Расширение в базе | Что это |
+| ------- | ----------------- | ------- |
+| `src/cfe/package-manager` | `package-manager` | Решение, поставка |
+| `tests/cfe/package-manager-tests` | `package-manager-tests` | Наши модульные тесты |
+| `tests/cfe/yaxunit` | `YAXUNIT` | Движок YAxUnit 25.12 |
 
-Поэтому исходники тестов лежат отдельно, а перед прогоном накладываются на
-копию решения. Получается одно расширение `package-manager`, где тесты и код
-видят друг друга. Поставляемая сборка при этом остаётся без тестов.
-
-```bash
-oscript tasks/build-test-extension.os
-```
-
-Результат — `build/out/tests/cfe/package-manager`. **В тестовую базу грузится
-именно он**, а не `src/cfe/package-manager`.
+Тесты не подмешиваются в решение. Отбор YAxUnit — `package-manager-tests`
+в `tools/yaxunit.json`.
 
 ## Контексты: почему прогон идёт на тонком клиенте
 
@@ -75,20 +70,6 @@ YAxUnit различает серверные и клиентские тесты
 opm install --dev
 ```
 
-Движок YAxUnit — сторонний компонент, в репозиторий не коммитится
-(он в `.gitignore`). Положите его исходники в `tests/cfe/yaxunit`: возьмите
-из соседнего чекаута БСП либо скачайте `YAxUnit.cfe` из релизов
-[bia-technologies/yaxunit](https://github.com/bia-technologies/yaxunit/releases)
-и разберите его через базу — `decompileext` выгружает из неё, а не из файла:
-
-```bash
-vrunner loadext --file YAxUnit.cfe --extension YAXUNIT --updatedb --settings env.json
-```
-
-```bash
-vrunner decompileext YAXUNIT tests/cfe/yaxunit --settings env.json
-```
-
 ## Развернуть базу
 
 Базовая конфигурация — заглушка `src/cf`. В её модулях объявлены пустые
@@ -101,10 +82,12 @@ vrunner init-dev --settings env.json
 ```
 
 ```bash
+vrunner compileext src/cfe/package-manager package-manager --updatedb --settings env.json
+vrunner compileext tests/cfe/package-manager-tests package-manager-tests --updatedb --settings env.json
 vrunner compileext tests/cfe/yaxunit YAXUNIT --updatedb --settings env.json
 ```
 
-**Снимите у расширений безопасный режим и защиту от опасных действий** —
+**Снимите у YAXUNIT безопасный режим и защиту от опасных действий** —
 иначе движок не сможет писать отчёт:
 
 ```bash

@@ -9,7 +9,7 @@
 //   oscript tasks/normalize-sources.os --check  только проверить (для CI)
 //
 // Обрабатываются .bsl и .xml в src и tests/cfe/package-manager-tests.
-// Движок YAxUnit не трогается: он сторонний и лежит вне этих каталогов.
+// Движок YAxUnit (tests/cfe/yaxunit) не трогается.
 
 #Использовать fs
 

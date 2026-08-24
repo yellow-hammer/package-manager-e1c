@@ -101,6 +101,7 @@ oscript tasks/check-all.os
 | --------- | -------- |
 | Коннектор (`пм_КоннекторHTTP`) | Apache-2.0 |
 | Модули БСП | CC BY 4.0 |
+| YAxUnit (`tests/cfe/yaxunit`) | Apache-2.0 |
 
 Каталог `build/YellowPM` — референс интерфейса под лицензией GPL-3.0,
 код из него не заимствуется.

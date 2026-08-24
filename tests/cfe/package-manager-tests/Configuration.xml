@@ -40,7 +40,7 @@
 					<v8:content>Тесты менеджера пакетов</v8:content>
 				</v8:item>
 			</Synonym>
-			<Comment>Исходники модульных тестов YAxUnit. Отдельно НЕ загружается: расширение не видит объекты другого расширения. Тесты накладываются на решение командой python tasks/build-test-extension.py</Comment>
+			<Comment>Модульные тесты YAxUnit. Грузится отдельно от package-manager.</Comment>
 			<ConfigurationExtensionPurpose>AddOn</ConfigurationExtensionPurpose>
 			<KeepMappingToExtendedConfigurationObjectsByIDs>false</KeepMappingToExtendedConfigurationObjectsByIDs>
 			<NamePrefix>пмТест_</NamePrefix>
