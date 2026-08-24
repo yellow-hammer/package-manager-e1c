@@ -23,7 +23,6 @@
 	Результат.Вставить("пм_ШаблонПубликацииGitLab", "gitlab/package.gitlab-ci.yml");
 	Результат.Вставить("пм_ШаблонПубликацииJenkins", "jenkins/Jenkinsfile.package");
 	Результат.Вставить("пм_ШаблонПубликацииGitHub", "github/package-release.yml");
-	Результат.Вставить("пм_ШаблонПубликацииGitea", "gitea/package-release.yml");
 
 	Возврат Результат;
 

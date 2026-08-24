@@ -1,12 +1,9 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"></meta><link rel="stylesheet" type="text/css" href="v8help://service_book/service_style"></link></head><body>
-<p>Справочник хранит <strong>каталоги пакетов</strong>. Одна строка — это один проект у провайдера, в котором лежит манифест каталога и реестр пакетов с файлами.</p>
-<p>Источник заводится один раз. Дальше новые пакеты и версии появляются в менеджере сами, вручную ссылки на каждый пакет прописывать не нужно.</p>
+<p>Справочник хранит <strong>проекты у провайдера</strong>. Одна строка — это один проект, из которого берутся пакеты и версии.</p>
+<p>Источник заводится один раз. GitLab читает Generic Package Registry, GitHub — Releases того же репозитория. Вручную ссылки на каждый пакет прописывать не нужно.</p>
 
-<h3>Режим каталога и режим одного пакета</h3>
-<ul>
-<li><div>Если заполнен <strong>Файл каталога</strong> (по умолчанию <strong>packages.json</strong>), список пакетов читается из этого манифеста.</div></li>
-<li><div>Если <strong>Файл каталога</strong> оставить пустым, источник работает в режиме одного пакета. Тогда обязательно заполнить <strong>Имя пакета</strong>.</div></li>
-</ul>
+<h3>Фильтр по имени пакета</h3>
+<p>Поле <strong>Имя пакета</strong> необязательно. Если его заполнить, из проекта берется только этот package. Если оставить пустым, в менеджере видны все пакеты проекта.</p>
 
 <h3>Публичный источник: без токена</h3>
 <p>Для публичного проекта поле <strong>Токен доступа</strong> оставьте <strong>пустым</strong>. Никакой настройки прав не требуется.</p>
@@ -14,9 +11,10 @@
 <h3>Приватный источник: с токеном</h3>
 <p>Для приватного проекта нужен токен с минимально необходимыми правами.</p>
 <ul>
-<li><div>GitLab: <strong>Project Access Token</strong>, если доступ нужен к одному проекту, или <strong>Personal Access Token</strong>, если к нескольким.</div></li>
-<li><div>Требуемая область: <strong>read_api</strong>. Права на запись выдавать не нужно — менеджер только читает.</div></li>
-<li><div>Где создать: проект → <strong>Settings</strong> → <strong>Access Tokens</strong>, либо пользователь → <strong>Preferences</strong> → <strong>Access Tokens</strong>.</div></li>
+<li><div>GitLab: <strong>Project Access Token</strong>, если доступ нужен к одному проекту, или <strong>Personal Access Token</strong>, если к нескольким. Область: <strong>read_api</strong>.</div></li>
+<li><div>GitHub: токен с правом чтения репозитория. Для fine-grained достаточно <strong>Contents: Read</strong>, для classic — <strong>repo</strong> на приватный проект.</div></li>
+<li><div>Права на запись выдавать не нужно — менеджер только читает.</div></li>
+<li><div>Где создать: проект или пользователь → настройки → Access Tokens.</div></li>
 </ul>
 
 <h3>Обращение с токеном</h3>

@@ -1,5 +1,12 @@
-# Публикация .cfe в GitLab Generic Package Registry.
+# Сборка .cfe и публикация в GitLab Generic Package Registry.
 # Плейсхолдеры @...@ подставляет обработка «Генератор шаблонов публикации».
+#
+# Имя package и файла - Name из Configuration.xml расширения.
+# Каталог исходников ищется в src/cfe по этому Name.
+#
+# Если в репозитории уже есть .gitlab-ci.yml, не затирайте его:
+# сохраните этот файл отдельно и подключите через include.
+# Теги раннера задайте сами (на корпоративном GitLab 1С обычно windows, ones).
 
 stages:
   - build
@@ -15,8 +22,39 @@ build:cfe:
   rules:
     - if: $CI_COMMIT_TAG
   script:
-    # TODO: заменить на команду сборки .cfe вашего проекта.
-    - test -f "${CFE_PATH}"
+    - |
+      $ErrorActionPreference = "Stop"
+      function Get-ExtensionName([string]$srcDir) {
+        $cfg = Join-Path $srcDir "Configuration.xml"
+        if (-not (Test-Path $cfg)) {
+          throw "No Configuration.xml in $srcDir"
+        }
+        $xml = New-Object System.Xml.XmlDocument
+        $xml.Load((Resolve-Path $cfg))
+        $nsmgr = New-Object System.Xml.XmlNamespaceManager($xml.NameTable)
+        $nsmgr.AddNamespace("md", "http://v8.1c.ru/8.3/MDClasses")
+        $node = $xml.SelectSingleNode("/md:MetaDataObject/md:Configuration/md:Properties/md:Name", $nsmgr)
+        if (-not $node -or [string]::IsNullOrWhiteSpace($node.InnerText)) {
+          throw "Name not found in $cfg"
+        }
+        return $node.InnerText.Trim()
+      }
+
+      $src = $null
+      Get-ChildItem -Path "src/cfe" -Directory | ForEach-Object {
+        if ((Get-ExtensionName $_.FullName) -eq $env:PACKAGE_NAME) {
+          $src = $_.FullName
+        }
+      }
+      if (-not $src) {
+        throw "No extension with Name=$env:PACKAGE_NAME in src/cfe"
+      }
+
+      New-Item -ItemType Directory -Force -Path "build/out/cfe" | Out-Null
+      vrunner compileexttocfe --settings env.json --src $src --out "$env:CFE_PATH"
+      if ($LASTEXITCODE -ne 0) {
+        throw "compileexttocfe failed for $env:PACKAGE_NAME"
+      }
   artifacts:
     paths:
       - "${CFE_PATH}"
@@ -30,8 +68,13 @@ package:gitlab:
     - job: build:cfe
       artifacts: true
   script:
-    - >
-      curl --fail
-      --header "JOB-TOKEN: ${CI_JOB_TOKEN}"
-      --upload-file "${CFE_PATH}"
-      "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${CI_COMMIT_TAG}/${CFE_NAME}"
+    - |
+      $ErrorActionPreference = "Stop"
+      $package = [uri]::EscapeDataString($env:PACKAGE_NAME)
+      $version = [uri]::EscapeDataString($env:CI_COMMIT_TAG)
+      $file = [uri]::EscapeDataString($env:CFE_NAME)
+      $url = "$env:CI_API_V4_URL/projects/$env:CI_PROJECT_ID/packages/generic/$package/$version/$file"
+      curl.exe --fail --header "JOB-TOKEN: $env:CI_JOB_TOKEN" --upload-file "$env:CFE_PATH" "$url"
+      if ($LASTEXITCODE -ne 0) {
+        throw "Package upload failed for $env:CFE_NAME"
+      }

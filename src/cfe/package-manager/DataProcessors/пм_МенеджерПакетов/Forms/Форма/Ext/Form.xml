@@ -23,6 +23,7 @@
 			<ExtendedTooltip name="ГруппаСпискиРасширеннаяПодсказка" id="148"/>
 			<ChildItems>
 				<Table name="Категории" id="131">
+					<Visible>false</Visible>
 					<Representation>List</Representation>
 					<CommandBarLocation>None</CommandBarLocation>
 					<ReadOnly>true</ReadOnly>

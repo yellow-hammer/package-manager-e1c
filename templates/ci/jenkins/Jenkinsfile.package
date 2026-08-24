@@ -1,5 +1,7 @@
 // Публикация .cfe в GitLab Generic Package Registry из Jenkins.
 // Плейсхолдеры @...@ подставляет обработка «Генератор шаблонов публикации».
+//
+// Имя package и файла - Name из Configuration.xml расширения.
 
 pipeline {
     agent any
@@ -16,8 +18,10 @@ pipeline {
     stages {
         stage('Build CFE') {
             steps {
-                // TODO: заменить на команду сборки .cfe вашего проекта.
-                sh 'test -f "${CFE_PATH}"'
+                sh '''
+                    mkdir -p build/out/cfe
+                    vrunner compileexttocfe --settings env.json --src "src/cfe/${PACKAGE_NAME}" --out "${CFE_PATH}"
+                '''
                 archiveArtifacts artifacts: "${CFE_PATH}", fingerprint: true
             }
         }

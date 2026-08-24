@@ -25,7 +25,6 @@
 				<xr:Item xsi:type="xr:MDObjectRef">CommonTemplate.пм_ШаблонПубликацииGitLab</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonTemplate.пм_ШаблонПубликацииJenkins</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonTemplate.пм_ШаблонПубликацииGitHub</xr:Item>
-				<xr:Item xsi:type="xr:MDObjectRef">CommonTemplate.пм_ШаблонПубликацииGitea</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">ScheduledJob.пм_ПроверкаОбновленийПакетов</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonModule.пм_ВерсииПакетов</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonModule.пм_ДлительныеОперации</xr:Item>
@@ -40,6 +39,7 @@
 				<xr:Item xsi:type="xr:MDObjectRef">CommonModule.пм_ОбщегоНазначенияКлиент</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonModule.пм_ОбщегоНазначенияКлиентСервер</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonModule.пм_ОбщегоНазначенияПовтИсп</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">CommonModule.пм_ПровайдерGitHub</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonModule.пм_ПровайдерGitLab</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonModule.пм_ПровайдерыПакетов</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonModule.пм_ПроверкаОбновлений</xr:Item>

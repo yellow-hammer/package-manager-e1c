@@ -82,7 +82,7 @@
 					<ToolTip>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
-							<v8:content>Путь к собранному .cfe относительно корня проекта</v8:content>
+							<v8:content>Путь к собранному .cfe: build/out/cfe/&lt;Name&gt;.cfe</v8:content>
 						</v8:item>
 					</ToolTip>
 					<ContextMenu name="ПутьКФайлуCFEКонтекстноеМеню" id="22"/>

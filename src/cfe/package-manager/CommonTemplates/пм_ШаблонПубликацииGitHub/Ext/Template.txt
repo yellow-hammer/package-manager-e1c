@@ -1,5 +1,7 @@
 ﻿# Публикация .cfe как ассета GitHub Release.
 # Плейсхолдеры @...@ подставляет обработка «Генератор шаблонов публикации».
+#
+# Имя package и файла - Name из Configuration.xml расширения.
 
 name: Publish package artifact
 
@@ -24,8 +26,8 @@ jobs:
 
       - name: Build CFE
         run: |
-          # TODO: заменить на команду сборки .cfe вашего проекта.
-          test -f "${CFE_PATH}"
+          mkdir -p build/out/cfe
+          vrunner compileexttocfe --settings env.json --src "src/cfe/${PACKAGE_NAME}" --out "${CFE_PATH}"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -41,7 +43,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.CFE_NAME }}
-          path: dist
+          path: build/out/cfe
 
       - name: Publish GitHub Release asset
         uses: softprops/action-gh-release@v2
