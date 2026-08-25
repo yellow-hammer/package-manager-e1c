@@ -89,7 +89,8 @@
 	Если СистемаCI = СистемаGitLab() Тогда
 		Возврат НСтр("ru = 'Токен не нужен: публикация идет под CI_JOB_TOKEN.
 			|Сборка: vrunner compileexttocfe, файл - build/out/cfe/<Name>.cfe.
-			|Имя package и файла - это Name из Configuration.xml расширения.
+			|Имя package берется из Name в Configuration.xml. GitLab Generic
+			|принимает только ASCII: не-ASCII Name транслитерируется.
 			|Если CI уже есть, не затирайте .gitlab-ci.yml: сохраните фрагмент
 			|и подключите через include. Теги раннера задайте сами.'");
 

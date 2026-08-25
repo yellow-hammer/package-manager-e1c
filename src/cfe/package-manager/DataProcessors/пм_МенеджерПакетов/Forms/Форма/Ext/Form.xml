@@ -172,6 +172,9 @@
 									</ChoiceList>
 									<ContextMenu name="ФильтрВерсийКонтекстноеМеню" id="194"/>
 									<ExtendedTooltip name="ФильтрВерсийРасширеннаяПодсказка" id="195"/>
+									<Events>
+										<Event name="OnChange">ФильтрВерсийПриИзменении</Event>
+									</Events>
 								</RadioButtonField>
 								<CommandBar name="Группа1" id="196">
 									<Title>
@@ -415,73 +418,6 @@
 								</InputField>
 							</ChildItems>
 						</Table>
-						<UsualGroup name="ГруппаЛегенда" id="214">
-							<Title>
-								<v8:item>
-									<v8:lang>ru</v8:lang>
-									<v8:content>Легенда</v8:content>
-								</v8:item>
-							</Title>
-							<Behavior>Collapsible</Behavior>
-							<CollapsedRepresentationTitle>
-								<v8:item>
-									<v8:lang>ru</v8:lang>
-									<v8:content>Легенда</v8:content>
-								</v8:item>
-							</CollapsedRepresentationTitle>
-							<Collapsed>true</Collapsed>
-							<ExtendedTooltip name="ГруппаЛегендаРасширеннаяПодсказка" id="215"/>
-							<ChildItems>
-								<UsualGroup name="Группа4" id="216">
-									<Title>
-										<v8:item>
-											<v8:lang>ru</v8:lang>
-											<v8:content>Группа4</v8:content>
-										</v8:item>
-									</Title>
-									<Group>Vertical</Group>
-									<Representation>None</Representation>
-									<ShowTitle>false</ShowTitle>
-									<ExtendedTooltip name="Группа4РасширеннаяПодсказка" id="217"/>
-									<ChildItems>
-										<PictureDecoration name="Декорация1" id="218">
-											<Title formatted="false">
-												<v8:item>
-													<v8:lang>ru</v8:lang>
-													<v8:content>Декорация1</v8:content>
-												</v8:item>
-											</Title>
-											<ToolTip>
-												<v8:item>
-													<v8:lang>ru</v8:lang>
-													<v8:content>Группа пакетов поставляемых для разных систем.</v8:content>
-												</v8:item>
-											</ToolTip>
-											<ToolTipRepresentation>ShowRight</ToolTipRepresentation>
-											<ContextMenu name="Декорация1КонтекстноеМеню" id="219"/>
-											<ExtendedTooltip name="Декорация1РасширеннаяПодсказка" id="220"/>
-										</PictureDecoration>
-										<PictureDecoration name="Декорация2" id="221">
-											<Title formatted="false">
-												<v8:item>
-													<v8:lang>ru</v8:lang>
-													<v8:content>Групповой пакет</v8:content>
-												</v8:item>
-											</Title>
-											<ToolTip>
-												<v8:item>
-													<v8:lang>ru</v8:lang>
-													<v8:content>После установки пакета требуется перезапуск клиента. При установке пакета с расширением требущим изменение структуры базы данных потретуется монопольный доступ.</v8:content>
-												</v8:item>
-											</ToolTip>
-											<ToolTipRepresentation>ShowRight</ToolTipRepresentation>
-											<ContextMenu name="Декорация2КонтекстноеМеню" id="222"/>
-											<ExtendedTooltip name="Декорация2РасширеннаяПодсказка" id="223"/>
-										</PictureDecoration>
-									</ChildItems>
-								</UsualGroup>
-							</ChildItems>
-						</UsualGroup>
 					</ChildItems>
 				</UsualGroup>
 			</ChildItems>
