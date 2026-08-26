@@ -41,6 +41,56 @@
 			<ContextMenu name="ЛимитВерсийКонтекстноеМеню" id="12"/>
 			<ExtendedTooltip name="ЛимитВерсийРасширеннаяПодсказка" id="13"/>
 		</InputField>
+		<CheckBoxField name="ОбновлятьОтмеченныеПоРасписанию" id="14">
+			<DataPath>ОбновлятьОтмеченныеПоРасписанию</DataPath>
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Обновлять отмеченные пакеты по расписанию</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Фон сначала проверяет обновления, затем ставит последнюю версию у пакетов с галкой автообновления. Сам менеджер так не обновляется.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<ToolTipRepresentation>Button</ToolTipRepresentation>
+			<CheckBoxType>Auto</CheckBoxType>
+			<ContextMenu name="ОбновлятьОтмеченныеПоРасписаниюКонтекстноеМеню" id="15"/>
+			<ExtendedTooltip name="ОбновлятьОтмеченныеПоРасписаниюРасширеннаяПодсказка" id="16"/>
+		</CheckBoxField>
+		<UsualGroup name="ГруппаРасписание" id="17">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Расписание</v8:content>
+				</v8:item>
+			</Title>
+			<Group>AlwaysHorizontal</Group>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="ГруппаРасписаниеРасширеннаяПодсказка" id="18"/>
+			<ChildItems>
+				<LabelField name="ПредставлениеРасписания" id="19">
+					<DataPath>ПредставлениеРасписания</DataPath>
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Расписание</v8:content>
+						</v8:item>
+					</Title>
+					<AutoMaxWidth>false</AutoMaxWidth>
+					<ContextMenu name="ПредставлениеРасписанияКонтекстноеМеню" id="20"/>
+					<ExtendedTooltip name="ПредставлениеРасписанияРасширеннаяПодсказка" id="21"/>
+				</LabelField>
+				<Button name="НастроитьРасписание" id="22">
+					<Type>UsualButton</Type>
+					<CommandName>Form.Command.НастроитьРасписание</CommandName>
+					<ExtendedTooltip name="НастроитьРасписаниеРасширеннаяПодсказка" id="23"/>
+				</Button>
+			</ChildItems>
+		</UsualGroup>
 	</ChildItems>
 	<Attributes>
 		<Attribute name="ЛимитВерсий" id="3">
@@ -57,6 +107,43 @@
 					<v8:FractionDigits>0</v8:FractionDigits>
 					<v8:AllowedSign>Nonnegative</v8:AllowedSign>
 				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ОбновлятьОтмеченныеПоРасписанию" id="24">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Обновлять отмеченные пакеты по расписанию</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="ПредставлениеРасписания" id="25">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Расписание</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="РасписаниеРегламентногоЗадания" id="26">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Расписание регламентного задания</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>v8:JobSchedule</v8:Type>
 			</Type>
 		</Attribute>
 	</Attributes>
@@ -78,6 +165,15 @@
 				</v8:item>
 			</Title>
 			<Action>Отмена</Action>
+		</Command>
+		<Command name="НастроитьРасписание" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Настроить расписание</v8:content>
+				</v8:item>
+			</Title>
+			<Action>НастроитьРасписание</Action>
 		</Command>
 	</Commands>
 </Form>

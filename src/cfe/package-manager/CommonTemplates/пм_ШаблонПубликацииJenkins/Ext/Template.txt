@@ -1,42 +1,153 @@
-﻿// Публикация .cfe в GitLab Generic Package Registry из Jenkins.
-// Плейсхолдеры @...@ подставляет обработка «Генератор шаблонов публикации».
-//
-// Имя package и файла - Name из Configuration.xml расширения.
+﻿// Публикация пакетов из pm-packages.json в GitLab Generic Package Registry.
 
 pipeline {
     agent any
 
     environment {
-        PACKAGE_NAME = '@PACKAGE_NAME@'
-        CFE_NAME = '@CFE_NAME@'
-        CFE_PATH = '@CFE_PATH@'
         GITLAB_API_URL = credentials('gitlab-api-url')
         GITLAB_PROJECT_ID = credentials('gitlab-project-id')
         GITLAB_TOKEN = credentials('gitlab-package-token')
     }
 
     stages {
-        stage('Build CFE') {
+        stage('Submodules') {
             steps {
-                sh '''
-                    mkdir -p build/out/cfe
-                    vrunner compileexttocfe --settings env.json --src "src/cfe/${PACKAGE_NAME}" --out "${CFE_PATH}"
-                '''
-                archiveArtifacts artifacts: "${CFE_PATH}", fingerprint: true
+                sh 'git submodule update --init --recursive'
             }
         }
 
-        stage('Publish GitLab Package') {
+        stage('Publish packages') {
             when {
                 buildingTag()
             }
             steps {
                 sh '''
-                    curl --fail \
-                      --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
-                      --upload-file "${CFE_PATH}" \
-                      "${GITLAB_API_URL}/projects/${GITLAB_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${TAG_NAME}/${CFE_NAME}"
+                    set -eu
+                    mkdir -p build/out/cfe build/out/epf build/out/erf
+
+                    source_sha() {
+                        src="$1"
+                        git_root="$(git -C "$src" rev-parse --show-toplevel)"
+                        prefix="$(git -C "$src" rev-parse --show-prefix)"
+                        prefix="${prefix%/}"
+                        if [ -n "$prefix" ]; then
+                            git -C "$git_root" rev-parse "HEAD:$prefix"
+                        else
+                            git -C "$git_root" rev-parse HEAD
+                        fi
+                    }
+
+                    resolve_kind() {
+                        src="$1"
+                        kind="$2"
+                        if [ -n "$kind" ]; then
+                            echo "$kind"
+                            return 0
+                        fi
+                        if [ -f "$src/Configuration.xml" ]; then
+                            echo cfe
+                            return 0
+                        fi
+                        echo "Set kind (cfe|epf|erf) for $src" >&2
+                        return 1
+                    }
+
+                    registry_get() {
+                        package="$1"
+                        version="$2"
+                        file="$3"
+                        dest="$4"
+                        curl --silent --fail \
+                          --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+                          --output "$dest" \
+                          "${GITLAB_API_URL}/projects/${GITLAB_PROJECT_ID}/packages/generic/${package}/${version}/${file}"
+                    }
+
+                    registry_put() {
+                        package="$1"
+                        version="$2"
+                        file="$3"
+                        src="$4"
+                        curl --fail \
+                          --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+                          --upload-file "$src" \
+                          "${GITLAB_API_URL}/projects/${GITLAB_PROJECT_ID}/packages/generic/${package}/${version}/${file}"
+                    }
+
+                    metadata_name() {
+                        if [ -f "$1/Configuration.xml" ]; then
+                            sed -n 's/.*<Name>\([^<]*\)<\/Name>.*/\1/p' "$1/Configuration.xml" | head -n 1
+                        else
+                            xml="$(find "$1" -maxdepth 1 -name '*.xml' | head -n 1)"
+                            sed -n 's/.*<Name>\([^<]*\)<\/Name>.*/\1/p' "$xml" | head -n 1
+                        fi
+                    }
+
+                    metadata_version() {
+                        if [ -f "$1/Configuration.xml" ]; then
+                            sed -n 's/.*<Version>\([^<]*\)<\/Version>.*/\1/p' "$1/Configuration.xml" | head -n 1
+                        else
+                            xml="$(find "$1" -maxdepth 1 -name '*.xml' | head -n 1)"
+                            sed -n 's/.*<Version>\([^<]*\)<\/Version>.*/\1/p' "$xml" | head -n 1
+                        fi
+                    }
+
+                    if [ ! -f pm-packages.json ]; then
+                        echo "pm-packages.json not found. List packages to publish, do not scan src/cfe." >&2
+                        exit 1
+                    fi
+
+                    python3 - <<'PY' > /tmp/pm-packages.txt
+import json
+manifest = json.load(open("pm-packages.json", encoding="utf-8"))
+items = manifest.get("packages") or []
+if not items:
+    raise SystemExit("pm-packages.json has no packages")
+for pkg in items:
+    path = (pkg.get("path") or "").strip()
+    if not path:
+        raise SystemExit("pm-packages.json: package without path")
+    print("%s\t%s" % (path, pkg.get("kind") or ""))
+PY
+
+                    while IFS=$(printf '\t') read -r path kind
+                    do
+                        [ -n "$path" ] || continue
+                        if [ ! -d "$path" ]; then
+                            echo "Path from pm-packages.json not found: $path" >&2
+                            exit 1
+                        fi
+                        kind="$(resolve_kind "$path" "$kind")"
+                        name="$(metadata_name "$path")"
+                        version="$(metadata_version "$path")"
+                        if [ -z "$name" ] || [ -z "$version" ]; then
+                            echo "Name or Version not found in $path" >&2
+                            exit 1
+                        fi
+                        sha="$(source_sha "$path")"
+                        out="build/out/${kind}/${name}.${kind}"
+                        shafile="build/out/${kind}/${name}.srcsha"
+                        mkdir -p "build/out/${kind}"
+                        if registry_get "$name" "$version" "${name}.srcsha" /tmp/pm.srcsha; then
+                            remote="$(tr -d '[:space:]' < /tmp/pm.srcsha)"
+                            if [ "$remote" = "$sha" ]; then
+                                echo "skip ${name} ${version}: sources unchanged"
+                                continue
+                            fi
+                            echo "Version ${version} of ${name} already published with different sources. Bump Version." >&2
+                            exit 1
+                        fi
+                        if [ "$kind" = "cfe" ]; then
+                            vrunner compileexttocfe --settings env.json --src "$path" --out "$out"
+                        else
+                            vrunner compileepf --settings env.json --src "$path" --out "$out"
+                        fi
+                        printf '%s' "$sha" > "$shafile"
+                        registry_put "$name" "$version" "${name}.${kind}" "$out"
+                        registry_put "$name" "$version" "${name}.srcsha" "$shafile"
+                    done < /tmp/pm-packages.txt
                 '''
+                archiveArtifacts artifacts: 'build/out/**/*', fingerprint: true, allowEmptyArchive: true
             }
         }
     }

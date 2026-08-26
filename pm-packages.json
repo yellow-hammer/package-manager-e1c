@@ -1,0 +1,8 @@
+{
+    "packages": [
+        {
+            "path": "src/cfe/package-manager",
+            "kind": "cfe"
+        }
+    ]
+}

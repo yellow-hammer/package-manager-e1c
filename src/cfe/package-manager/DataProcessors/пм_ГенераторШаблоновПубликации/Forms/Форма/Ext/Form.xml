@@ -55,39 +55,6 @@
 						<Event name="OnChange">СистемаCIПриИзменении</Event>
 					</Events>
 				</InputField>
-				<InputField name="ИмяПакета" id="15">
-					<DataPath>ИмяПакета</DataPath>
-					<ToolTip>
-						<v8:item>
-							<v8:lang>ru</v8:lang>
-							<v8:content>Имя package в реестре пакетов провайдера</v8:content>
-						</v8:item>
-					</ToolTip>
-					<ContextMenu name="ИмяПакетаКонтекстноеМеню" id="16"/>
-					<ExtendedTooltip name="ИмяПакетаРасширеннаяПодсказка" id="17"/>
-				</InputField>
-				<InputField name="ИмяФайлаCFE" id="18">
-					<DataPath>ИмяФайлаCFE</DataPath>
-					<ToolTip>
-						<v8:item>
-							<v8:lang>ru</v8:lang>
-							<v8:content>Имя собранного файла расширения</v8:content>
-						</v8:item>
-					</ToolTip>
-					<ContextMenu name="ИмяФайлаCFEКонтекстноеМеню" id="19"/>
-					<ExtendedTooltip name="ИмяФайлаCFEРасширеннаяПодсказка" id="20"/>
-				</InputField>
-				<InputField name="ПутьКФайлуCFE" id="21">
-					<DataPath>ПутьКФайлуCFE</DataPath>
-					<ToolTip>
-						<v8:item>
-							<v8:lang>ru</v8:lang>
-							<v8:content>Путь к собранному .cfe: build/out/cfe/&lt;Name&gt;.cfe</v8:content>
-						</v8:item>
-					</ToolTip>
-					<ContextMenu name="ПутьКФайлуCFEКонтекстноеМеню" id="22"/>
-					<ExtendedTooltip name="ПутьКФайлуCFEРасширеннаяПодсказка" id="23"/>
-				</InputField>
 				<LabelField name="Подсказка" id="24">
 					<DataPath>Подсказка</DataPath>
 					<Title>
@@ -112,11 +79,27 @@
 			</Title>
 			<TitleLocation>Top</TitleLocation>
 			<Width>100</Width>
-			<Height>20</Height>
+			<Height>12</Height>
 			<VerticalStretch>true</VerticalStretch>
 			<MultiLine>true</MultiLine>
 			<ContextMenu name="ТекстШаблонаКонтекстноеМеню" id="28"/>
 			<ExtendedTooltip name="ТекстШаблонаРасширеннаяПодсказка" id="29"/>
+		</InputField>
+		<InputField name="ТекстСкрипта" id="34">
+			<DataPath>ТекстСкрипта</DataPath>
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Скрипт публикации</v8:content>
+				</v8:item>
+			</Title>
+			<TitleLocation>Top</TitleLocation>
+			<Width>100</Width>
+			<Height>16</Height>
+			<VerticalStretch>true</VerticalStretch>
+			<MultiLine>true</MultiLine>
+			<ContextMenu name="ТекстСкриптаКонтекстноеМеню" id="35"/>
+			<ExtendedTooltip name="ТекстСкриптаРасширеннаяПодсказка" id="36"/>
 		</InputField>
 	</ChildItems>
 	<Attributes>
@@ -135,56 +118,26 @@
 				</v8:StringQualifiers>
 			</Type>
 		</Attribute>
-		<Attribute name="ИмяПакета" id="2">
-			<Title>
-				<v8:item>
-					<v8:lang>ru</v8:lang>
-					<v8:content>Имя пакета</v8:content>
-				</v8:item>
-			</Title>
-			<Type>
-				<v8:Type>xs:string</v8:Type>
-				<v8:StringQualifiers>
-					<v8:Length>150</v8:Length>
-					<v8:AllowedLength>Variable</v8:AllowedLength>
-				</v8:StringQualifiers>
-			</Type>
-		</Attribute>
-		<Attribute name="ИмяФайлаCFE" id="3">
-			<Title>
-				<v8:item>
-					<v8:lang>ru</v8:lang>
-					<v8:content>Имя файла CFE</v8:content>
-				</v8:item>
-			</Title>
-			<Type>
-				<v8:Type>xs:string</v8:Type>
-				<v8:StringQualifiers>
-					<v8:Length>260</v8:Length>
-					<v8:AllowedLength>Variable</v8:AllowedLength>
-				</v8:StringQualifiers>
-			</Type>
-		</Attribute>
-		<Attribute name="ПутьКФайлуCFE" id="4">
-			<Title>
-				<v8:item>
-					<v8:lang>ru</v8:lang>
-					<v8:content>Путь к файлу CFE</v8:content>
-				</v8:item>
-			</Title>
-			<Type>
-				<v8:Type>xs:string</v8:Type>
-				<v8:StringQualifiers>
-					<v8:Length>500</v8:Length>
-					<v8:AllowedLength>Variable</v8:AllowedLength>
-				</v8:StringQualifiers>
-			</Type>
-		</Attribute>
 		<Attribute name="ТекстШаблона" id="5">
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
 					<v8:content>Текст шаблона</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ТекстСкрипта" id="7">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Скрипт публикации</v8:content>
 				</v8:item>
 			</Title>
 			<Type>

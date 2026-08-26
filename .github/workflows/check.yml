@@ -1,0 +1,77 @@
+name: Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_call:
+  workflow_dispatch:
+
+concurrency:
+  group: check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  ONEC_VERSION: "8.3.27"
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-onec
+        env:
+          YARD_RELEASES_USER: ${{ secrets.ONEC_LOGIN }}
+          YARD_RELEASES_PWD: ${{ secrets.ONEC_PASSWORD }}
+          ONEC_VERSION: ${{ env.ONEC_VERSION }}
+
+      - name: Vanessa-runner
+        run: opm install -l vanessa-runner
+
+      - name: ИБ и расширения
+        run: |
+          set -euo pipefail
+          export PATH="${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
+          vrunner init-dev --src src/cf --settings env.json --ibcmd
+          vrunner compileext src/cfe/package-manager package-manager --updatedb --settings env.json --ibcmd
+          vrunner compileext tests/cfe/yaxunit YAXUNIT --updatedb --settings env.json --ibcmd
+          vrunner compileext tests/cfe/yaxunit-tests yaxunit-tests --updatedb --settings env.json --ibcmd
+
+      - name: YAxUnit
+        run: |
+          set -euo pipefail
+          export PATH="${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
+          mkdir -p build/out/yaxunit
+          xvfb-run -a vrunner run --command "RunUnitTests=./tools/yaxunit.json" \
+            --settings env.json --ordinaryapp false
+
+      - name: Синтакс-контроль
+        run: |
+          set -euo pipefail
+          export PATH="${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
+          vrunner syntax-check --settings env.json --ibcmd
+
+      - name: Собрать cfe
+        run: |
+          set -euo pipefail
+          export PATH="${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
+          mkdir -p build/out/cfe
+          vrunner compileexttocfe --ibcmd --settings env.json \
+            --src src/cfe/package-manager \
+            --out build/out/cfe/package-manager.cfe
+          git rev-parse HEAD:src/cfe/package-manager > build/out/cfe/package-manager.srcsha
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: yaxunit
+          path: build/out/yaxunit/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: package
+          path: |
+            build/out/cfe/package-manager.cfe
+            build/out/cfe/package-manager.srcsha

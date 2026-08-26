@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    uses: ./.github/workflows/check.yml
+    secrets: inherit
+
+  publish:
+    needs: test
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: package
+          path: build/out/cfe
+
+      - name: Version и тег
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(sed -n 's/.*<Version>\([^<]*\)<\/Version>.*/\1/p' src/cfe/package-manager/Configuration.xml | head -1)"
+          if [ "$version" != "$tag" ]; then
+            echo "Version ${version} != тег ${tag}"
+            exit 1
+          fi
+          sha="$(cat build/out/cfe/package-manager.srcsha)"
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            mkdir -p /tmp/pm-sha
+            if gh release download "$GITHUB_REF_NAME" --pattern package-manager.srcsha --dir /tmp/pm-sha 2>/dev/null; then
+              remote="$(tr -d '[:space:]' < /tmp/pm-sha/package-manager.srcsha)"
+              if [ "$remote" = "$sha" ]; then
+                echo "Источники не менялись"
+                exit 0
+              fi
+              echo "Версия ${version} уже опубликована с другой суммой исходников"
+              exit 1
+            fi
+          fi
+          gh release create "$GITHUB_REF_NAME" \
+            build/out/cfe/package-manager.cfe \
+            build/out/cfe/package-manager.srcsha \
+            --title "$GITHUB_REF_NAME" --generate-notes --fail-on-existing || \
+          gh release upload "$GITHUB_REF_NAME" \
+            build/out/cfe/package-manager.cfe \
+            build/out/cfe/package-manager.srcsha \
+            --clobber

@@ -1,7 +1,4 @@
-﻿# Публикация .cfe как ассета GitHub Release.
-# Плейсхолдеры @...@ подставляет обработка «Генератор шаблонов публикации».
-#
-# Имя package и файла - Name из Configuration.xml расширения.
+﻿# Публикация пакетов из pm-packages.json в GitHub Release.
 
 name: Publish package artifact
 
@@ -13,39 +10,145 @@ on:
 permissions:
   contents: write
 
-env:
-  PACKAGE_NAME: @PACKAGE_NAME@
-  CFE_NAME: @CFE_NAME@
-  CFE_PATH: @CFE_PATH@
-
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
-      - name: Build CFE
+      - name: Build and publish packages
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mkdir -p build/out/cfe
-          vrunner compileexttocfe --settings env.json --src "src/cfe/${PACKAGE_NAME}" --out "${CFE_PATH}"
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME#v}"
+          mkdir -p build/out/cfe build/out/epf build/out/erf
+          files=()
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.CFE_NAME }}
-          path: ${{ env.CFE_PATH }}
+          xml_text() {
+            python3 - "$1" "$2" <<'PY'
+          import sys, xml.etree.ElementTree as ET
+          path, local = sys.argv[1], sys.argv[2]
+          tree = ET.parse(path)
+          for node in tree.iter():
+              if node.tag.split("}")[-1] == local and node.text and node.text.strip():
+                  print(node.text.strip())
+                  raise SystemExit
+          raise SystemExit(1)
+          PY
+          }
 
-  release:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.CFE_NAME }}
-          path: build/out/cfe
+          package_name() {
+            if [ -f "$1/Configuration.xml" ]; then
+              xml_text "$1/Configuration.xml" Name
+            else
+              xml_text "$(find "$1" -maxdepth 1 -name '*.xml' | head -n 1)" Name
+            fi
+          }
 
-      - name: Publish GitHub Release asset
-        uses: softprops/action-gh-release@v2
-        with:
-          files: ${{ env.CFE_PATH }}
+          metadata_version() {
+            if [ -f "$1/Configuration.xml" ]; then
+              xml_text "$1/Configuration.xml" Version
+            else
+              xml_text "$(find "$1" -maxdepth 1 -name '*.xml' | head -n 1)" Version
+            fi
+          }
+
+          source_sha() {
+            local src="$1"
+            local git_root prefix
+            git_root="$(git -C "$src" rev-parse --show-toplevel)"
+            prefix="$(git -C "$src" rev-parse --show-prefix)"
+            prefix="${prefix%/}"
+            if [ -n "$prefix" ]; then
+              git -C "$git_root" rev-parse "HEAD:$prefix"
+            else
+              git -C "$git_root" rev-parse HEAD
+            fi
+          }
+
+          resolve_kind() {
+            local src="$1"
+            local kind="$2"
+            if [ -n "$kind" ]; then
+              echo "$kind"
+              return 0
+            fi
+            if [ -f "$src/Configuration.xml" ]; then
+              echo cfe
+              return 0
+            fi
+            echo "Set kind (cfe|epf|erf) for $src" >&2
+            return 1
+          }
+
+          publish_one() {
+            kind="$1"
+            src="$2"
+            name="$(package_name "$src")"
+            version="$(metadata_version "$src")"
+            sha="$(source_sha "$src")"
+            out="build/out/${kind}/${name}.${kind}"
+            shafile="build/out/${kind}/${name}.srcsha"
+
+            if [ "$version" != "$tag" ]; then
+              echo "skip ${name}: metadata Version ${version} != tag ${tag}"
+              return 0
+            fi
+
+            if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+              if gh release download "$GITHUB_REF_NAME" --pattern "${name}.srcsha" --dir /tmp/pm-sha 2>/dev/null; then
+                remote="$(tr -d '[:space:]' < "/tmp/pm-sha/${name}.srcsha")"
+                if [ "$remote" = "$sha" ]; then
+                  echo "skip ${name} ${version}: sources unchanged"
+                  return 0
+                fi
+                echo "Version ${version} of ${name} already published with different sources. Bump Version." >&2
+                return 1
+              fi
+            fi
+
+            if [ "$kind" = "cfe" ]; then
+              vrunner compileexttocfe --settings env.json --src "$src" --out "$out"
+            else
+              vrunner compileepf --settings env.json --src "$src" --out "$out"
+            fi
+            printf '%s' "$sha" > "$shafile"
+            files+=("$out" "$shafile")
+          }
+
+          if [ ! -f pm-packages.json ]; then
+            echo "pm-packages.json not found. List packages to publish, do not scan src/cfe." >&2
+            exit 1
+          fi
+
+          while IFS=$'\t' read -r path kind; do
+            [ -n "$path" ] || continue
+            if [ ! -d "$path" ]; then
+              echo "Path from pm-packages.json not found: $path" >&2
+              exit 1
+            fi
+            publish_one "$(resolve_kind "$path" "$kind")" "$path"
+          done < <(python3 - <<'PY'
+          import json
+          manifest = json.load(open("pm-packages.json", encoding="utf-8"))
+          items = manifest.get("packages") or []
+          if not items:
+              raise SystemExit("pm-packages.json has no packages")
+          for pkg in items:
+              path = (pkg.get("path") or "").strip()
+              if not path:
+                  raise SystemExit("pm-packages.json: package without path")
+              print(f"{path}\t{pkg.get('kind') or ''}")
+          PY
+          )
+
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "Nothing to publish"
+            exit 0
+          fi
+
+          gh release create "$GITHUB_REF_NAME" "${files[@]}" --title "$GITHUB_REF_NAME" --generate-notes --fail-on-existing || \
+          gh release upload "$GITHUB_REF_NAME" "${files[@]}" --clobber

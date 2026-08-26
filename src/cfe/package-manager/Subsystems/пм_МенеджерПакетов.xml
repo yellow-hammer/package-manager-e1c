@@ -25,6 +25,7 @@
 				<xr:Item xsi:type="xr:MDObjectRef">CommonTemplate.пм_ШаблонПубликацииGitLab</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonTemplate.пм_ШаблонПубликацииJenkins</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonTemplate.пм_ШаблонПубликацииGitHub</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">CommonTemplate.пм_СкриптПубликацииGitLab</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">ScheduledJob.пм_ПроверкаОбновленийПакетов</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonModule.пм_ВерсииПакетов</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonModule.пм_ДлительныеОперации</xr:Item>

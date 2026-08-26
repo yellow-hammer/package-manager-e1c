@@ -1,0 +1,39 @@
+name: setup-onec
+description: OneScript, yard, платформа 1С с releases.1c.ru
+
+runs:
+  using: composite
+  steps:
+    - uses: otymko/setup-onescript@v1.5.1
+      with:
+        version: stable
+
+    - name: yard
+      shell: bash
+      run: |
+        opm install opm
+        opm install yard
+        YARD_OS="$(find "$HOME/.local/share/ovm" -path '*/yard/src/yard.os' 2>/dev/null | head -1)"
+        if [ -z "$YARD_OS" ]; then
+          echo "yard.os не найден"
+          exit 1
+        fi
+        echo "YARD_OS=$YARD_OS" >> "$GITHUB_ENV"
+
+    - name: Зависимости Linux
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+          fontconfig libgsf-1-114 libglib2.0-0 libodbc1 libwebkit2gtk-4.0-37 \
+          xvfb unzip curl
+        LE_BASE=http://archive.ubuntu.com/ubuntu/pool/universe/e/enchant/
+        LE_FILE="$(curl -s "$LE_BASE" | grep -oE 'libenchant1c2a_[^"]*_amd64\.deb' | head -1)"
+        curl -sL "$LE_BASE$LE_FILE" -o /tmp/libenchant.deb
+        sudo apt-get install -y /tmp/libenchant.deb
+        mkdir -p "$HOME/.1cv8/1C/1cv8/conf"
+        echo "DisableUnsafeActionProtection=.*" >> "$HOME/.1cv8/1C/1cv8/conf/conf.cfg"
+
+    - name: Платформа
+      shell: bash
+      run: oscript .github/scripts/install-onec.os

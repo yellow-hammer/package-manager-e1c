@@ -96,6 +96,7 @@
 			<CommonTemplate>пм_ШаблонПубликацииGitLab</CommonTemplate>
 			<CommonTemplate>пм_ШаблонПубликацииJenkins</CommonTemplate>
 			<CommonTemplate>пм_ШаблонПубликацииGitHub</CommonTemplate>
+			<CommonTemplate>пм_СкриптПубликацииGitLab</CommonTemplate>
 			<CommonModule>пм_ВерсииПакетов</CommonModule>
 			<CommonModule>пм_ДлительныеОперации</CommonModule>
 			<CommonModule>пм_ДлительныеОперацииВызовСервера</CommonModule>
