@@ -204,11 +204,6 @@
 										</Title>
 										<ExtendedTooltip name="ПакетыСкачатьРасширеннаяПодсказка" id="241"/>
 									</Button>
-									<Button name="ПакетыОбновитьВыбранные" id="242">
-										<Type>CommandBarButton</Type>
-										<CommandName>Form.Command.ОбновитьВыбранные</CommandName>
-										<ExtendedTooltip name="ПакетыОбновитьВыбранныеРасширеннаяПодсказка" id="243"/>
-									</Button>
 									<Button name="ПакетыОтметитьСтроки" id="65">
 										<Type>CommandBarButton</Type>
 										<CommandName>Form.Command.ОтметитьСтроки</CommandName>
@@ -295,6 +290,10 @@
 								<InputField name="ПакетыУстановленнаяВерсия" id="44">
 									<DataPath>Пакеты.УстановленнаяВерсия</DataPath>
 									<ReadOnly>true</ReadOnly>
+									<Width>16</Width>
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<MaxWidth>16</MaxWidth>
+									<HorizontalStretch>false</HorizontalStretch>
 									<ContextMenu name="ПакетыУстановленнаяВерсияКонтекстноеМеню" id="45"/>
 									<ExtendedTooltip name="ПакетыУстановленнаяВерсияРасширеннаяПодсказка" id="46"/>
 								</InputField>
@@ -306,6 +305,10 @@
 											<v8:content>Версия</v8:content>
 										</v8:item>
 									</Title>
+									<Width>10</Width>
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<MaxWidth>10</MaxWidth>
+									<HorizontalStretch>false</HorizontalStretch>
 									<ChoiceButton>true</ChoiceButton>
 									<TextEdit>false</TextEdit>
 									<ContextMenu name="ПакетыВыбраннаяВерсияКонтекстноеМеню" id="250"/>
@@ -830,26 +833,10 @@
 			<ToolTip>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Установить отмеченные пакеты. Если ничего не отмечено — текущую строку. Перезапуск после всей пачки.</v8:content>
+					<v8:content>Установить отмеченные пакеты. Перезапуск после всей пачки.</v8:content>
 				</v8:item>
 			</ToolTip>
 			<Action>Скачать</Action>
-			<Representation>TextPicture</Representation>
-		</Command>
-		<Command name="ОбновитьВыбранные" id="6">
-			<Title>
-				<v8:item>
-					<v8:lang>ru</v8:lang>
-					<v8:content>Обновить выбранные</v8:content>
-				</v8:item>
-			</Title>
-			<ToolTip>
-				<v8:item>
-					<v8:lang>ru</v8:lang>
-					<v8:content>Установить выбранные версии у отмеченных пакетов. Один вопрос на всю пачку.</v8:content>
-				</v8:item>
-			</ToolTip>
-			<Action>ОбновитьВыбранные</Action>
 			<Representation>TextPicture</Representation>
 		</Command>
 		<Command name="ОткрытьИсточники" id="7">
