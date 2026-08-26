@@ -64,6 +64,9 @@
 						</v8:item>
 					</Title>
 					<TitleLocation>Top</TitleLocation>
+					<Width>100</Width>
+					<Height>8</Height>
+					<MultiLine>true</MultiLine>
 					<ContextMenu name="ПодсказкаКонтекстноеМеню" id="25"/>
 					<ExtendedTooltip name="ПодсказкаРасширеннаяПодсказка" id="26"/>
 				</LabelField>
