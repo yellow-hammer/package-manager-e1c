@@ -3,7 +3,7 @@
     "closeAfterTests": true,
     "filter": {
         "extensions": [
-            "yaxunit-tests"
+            "YAXUNIT-tests"
         ],
         "modules": null,
         "suites": null,

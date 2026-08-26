@@ -116,69 +116,6 @@
 										<Event name="OnChange">ИсточникПриИзменении</Event>
 									</Events>
 								</InputField>
-								<RadioButtonField name="ФильтрВерсий" id="193">
-									<DataPath>ФильтрВерсий</DataPath>
-									<RadioButtonType>Tumbler</RadioButtonType>
-									<ChoiceList>
-										<xr:Item>
-											<xr:Presentation/>
-											<xr:CheckState>0</xr:CheckState>
-											<xr:Value xsi:type="FormChoiceListDesTimeValue">
-												<Presentation>
-													<v8:item>
-														<v8:lang>ru</v8:lang>
-														<v8:content>Стабильные</v8:content>
-													</v8:item>
-												</Presentation>
-												<Value xsi:type="xs:string">stable</Value>
-											</xr:Value>
-										</xr:Item>
-										<xr:Item>
-											<xr:Presentation/>
-											<xr:CheckState>0</xr:CheckState>
-											<xr:Value xsi:type="FormChoiceListDesTimeValue">
-												<Presentation>
-													<v8:item>
-														<v8:lang>ru</v8:lang>
-														<v8:content>Предрелизные</v8:content>
-													</v8:item>
-												</Presentation>
-												<Value xsi:type="xs:string">rc</Value>
-											</xr:Value>
-										</xr:Item>
-										<xr:Item>
-											<xr:Presentation/>
-											<xr:CheckState>0</xr:CheckState>
-											<xr:Value xsi:type="FormChoiceListDesTimeValue">
-												<Presentation>
-													<v8:item>
-														<v8:lang>ru</v8:lang>
-														<v8:content>В разработке</v8:content>
-													</v8:item>
-												</Presentation>
-												<Value xsi:type="xs:string">dev</Value>
-											</xr:Value>
-										</xr:Item>
-										<xr:Item>
-											<xr:Presentation/>
-											<xr:CheckState>0</xr:CheckState>
-											<xr:Value xsi:type="FormChoiceListDesTimeValue">
-												<Presentation>
-													<v8:item>
-														<v8:lang>ru</v8:lang>
-														<v8:content>Все</v8:content>
-													</v8:item>
-												</Presentation>
-												<Value xsi:type="xs:string">Все</Value>
-											</xr:Value>
-										</xr:Item>
-									</ChoiceList>
-									<ContextMenu name="ФильтрВерсийКонтекстноеМеню" id="194"/>
-									<ExtendedTooltip name="ФильтрВерсийРасширеннаяПодсказка" id="195"/>
-									<Events>
-										<Event name="OnChange">ФильтрВерсийПриИзменении</Event>
-									</Events>
-								</RadioButtonField>
 								<CommandBar name="Группа1" id="196">
 									<Title>
 										<v8:item>
@@ -369,7 +306,6 @@
 											<v8:content>Версия</v8:content>
 										</v8:item>
 									</Title>
-									<DropListButton>true</DropListButton>
 									<ChoiceButton>true</ChoiceButton>
 									<TextEdit>false</TextEdit>
 									<ContextMenu name="ПакетыВыбраннаяВерсияКонтекстноеМеню" id="250"/>
@@ -850,21 +786,6 @@
 				<v8:Type>cfg:CatalogRef.пм_ИсточникиПакетов</v8:Type>
 			</Type>
 		</Attribute>
-		<Attribute name="ФильтрВерсий" id="45">
-			<Title>
-				<v8:item>
-					<v8:lang>ru</v8:lang>
-					<v8:content>Фильтр версий</v8:content>
-				</v8:item>
-			</Title>
-			<Type>
-				<v8:Type>xs:string</v8:Type>
-				<v8:StringQualifiers>
-					<v8:Length>20</v8:Length>
-					<v8:AllowedLength>Variable</v8:AllowedLength>
-				</v8:StringQualifiers>
-			</Type>
-		</Attribute>
 	</Attributes>
 	<Commands>
 		<Command name="ПроверитьОбновления" id="230">
@@ -909,7 +830,7 @@
 			<ToolTip>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Установить выбранную версию текущей строки. Если версию не меняли, ставится последняя.</v8:content>
+					<v8:content>Установить отмеченные пакеты. Если ничего не отмечено — текущую строку. Перезапуск после всей пачки.</v8:content>
 				</v8:item>
 			</ToolTip>
 			<Action>Скачать</Action>

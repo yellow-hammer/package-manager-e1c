@@ -37,7 +37,7 @@ jobs:
           vrunner init-dev --src src/cf --settings env.json --ibcmd
           vrunner compileext src/cfe/package-manager package-manager --updatedb --settings env.json --ibcmd
           vrunner compileext tests/cfe/yaxunit YAXUNIT --updatedb --settings env.json --ibcmd
-          vrunner compileext tests/cfe/yaxunit-tests yaxunit-tests --updatedb --settings env.json --ibcmd
+          vrunner compileext tests/cfe/yaxunit-tests YAXUNIT-tests --updatedb --settings env.json --ibcmd
 
       - name: YAxUnit
         run: |
