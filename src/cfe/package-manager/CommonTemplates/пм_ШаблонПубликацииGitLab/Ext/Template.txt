@@ -1,10 +1,14 @@
 ﻿# Публикация пакетов из pm-packages.json. Логика — ci/publish-packages.os.
+# Срабатывает только на тег. Скрипт сам проверяет, что коммит тега уже
+# в ветке релиза: ветка задается PM_RELEASE_BRANCH, по умолчанию main.
 
 stages:
   - package
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
+  # Полная история: без нее не проверить, что тег стоит на ветке релиза.
+  GIT_DEPTH: 0
 
 publish:
   stage: package
