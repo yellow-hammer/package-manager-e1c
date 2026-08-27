@@ -4,9 +4,17 @@
 	<setForAttributesByDefault>true</setForAttributesByDefault>
 	<independentRightsOfChildObjects>false</independentRightsOfChildObjects>
 	<object>
-		<name>Subsystem.пм_МенеджерПакетов</name>
+		<name>Catalog.пм_ИсточникиПакетов</name>
+		<right>
+			<name>Read</name>
+			<value>true</value>
+		</right>
 		<right>
 			<name>View</name>
+			<value>true</value>
+		</right>
+		<right>
+			<name>InputByString</name>
 			<value>true</value>
 		</right>
 	</object>
@@ -33,17 +41,9 @@
 		</right>
 	</object>
 	<object>
-		<name>Catalog.пм_ИсточникиПакетов</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
+		<name>Subsystem.пм_МенеджерПакетов</name>
 		<right>
 			<name>View</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>InputByString</name>
 			<value>true</value>
 		</right>
 	</object>

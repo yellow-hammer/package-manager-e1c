@@ -14,6 +14,7 @@
 			<IncludeInCommandInterface>true</IncludeInCommandInterface>
 			<UseOneCommand>false</UseOneCommand>
 			<Explanation/>
+			<Picture/>
 			<Content>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.пм_Внимание</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.пм_ГруппаПакетов</xr:Item>

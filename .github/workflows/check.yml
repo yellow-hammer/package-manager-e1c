@@ -12,7 +12,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  ONEC_VERSION: "8.3.27"
+  # Версия не фиксируется: берется самая новая доступная учетной записи.
+  ONEC_MIN_VERSION: "8.3.23"
 
 jobs:
   test:
@@ -25,7 +26,7 @@ jobs:
         env:
           YARD_RELEASES_USER: ${{ secrets.ONEC_LOGIN }}
           YARD_RELEASES_PWD: ${{ secrets.ONEC_PASSWORD }}
-          ONEC_VERSION: ${{ env.ONEC_VERSION }}
+          ONEC_MIN_VERSION: ${{ env.ONEC_MIN_VERSION }}
 
       - name: Vanessa-runner
         run: opm install -l vanessa-runner

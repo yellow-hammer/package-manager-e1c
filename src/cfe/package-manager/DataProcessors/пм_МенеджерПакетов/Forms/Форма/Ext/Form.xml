@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcssch="http://v8.1c.ru/8.1/data-composition-system/schema" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
 	<AutoSaveDataInSettings>Use</AutoSaveDataInSettings>
 	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
 		<Autofill>false</Autofill>
@@ -23,8 +23,8 @@
 			<ExtendedTooltip name="ГруппаСпискиРасширеннаяПодсказка" id="148"/>
 			<ChildItems>
 				<Table name="Категории" id="131">
-					<Visible>false</Visible>
 					<Representation>List</Representation>
+					<Visible>false</Visible>
 					<CommandBarLocation>None</CommandBarLocation>
 					<ReadOnly>true</ReadOnly>
 					<SkipOnInput>false</SkipOnInput>
@@ -99,17 +99,17 @@
 							<ChildItems>
 								<InputField name="Источник" id="225">
 									<DataPath>Источник</DataPath>
-									<Width>28</Width>
-									<ClearButton>true</ClearButton>
-									<OpenButton>true</OpenButton>
-									<AutoMarkIncomplete>false</AutoMarkIncomplete>
+									<TitleLocation>Left</TitleLocation>
 									<ToolTip>
 										<v8:item>
 											<v8:lang>ru</v8:lang>
 											<v8:content>Необязательный отбор. Если пусто, читаются все источники.</v8:content>
 										</v8:item>
 									</ToolTip>
-									<TitleLocation>Left</TitleLocation>
+									<Width>28</Width>
+									<ClearButton>true</ClearButton>
+									<OpenButton>true</OpenButton>
+									<AutoMarkIncomplete>false</AutoMarkIncomplete>
 									<ContextMenu name="ИсточникКонтекстноеМеню" id="226"/>
 									<ExtendedTooltip name="ИсточникРасширеннаяПодсказка" id="227"/>
 									<Events>
@@ -136,7 +136,7 @@
 											</Title>
 											<ExtendedTooltip name="ПакетыПроверитьОбновленияРасширеннаяПодсказка" id="233"/>
 										</Button>
-									<Button name="ПакетыОбновить" id="31">
+										<Button name="ПакетыОбновить" id="31">
 											<Type>CommandBarButton</Type>
 											<CommandName>Form.Command.Обновить</CommandName>
 											<Title>
@@ -362,7 +362,7 @@
 						</Table>
 						<LabelDecoration name="НадписьНетИсточников" id="258">
 							<Visible>false</Visible>
-							<Title>
+							<Title formatted="false">
 								<v8:item>
 									<v8:lang>ru</v8:lang>
 									<v8:content>Нет источников пакетов. Добавьте проект в справочник источников.</v8:content>
@@ -376,8 +376,8 @@
 							</Events>
 						</LabelDecoration>
 						<Table name="Версии" id="149">
-							<Visible>false</Visible>
 							<Representation>List</Representation>
+							<Visible>false</Visible>
 							<SelectionMode>SingleRow</SelectionMode>
 							<RowSelectionMode>Row</RowSelectionMode>
 							<DataPath>Версии</DataPath>
@@ -805,7 +805,6 @@
 				</v8:item>
 			</ToolTip>
 			<Action>ПроверитьОбновления</Action>
-			<Representation>Auto</Representation>
 		</Command>
 		<Command name="Обновить" id="1">
 			<Title>
