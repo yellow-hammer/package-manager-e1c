@@ -2,5 +2,9 @@
   "1c-platform-tools.cfe.selected": [
     "package-manager"
   ],
-  "1c-platform-tools.cf.updateDbAfterLoad": "always"
+  "1c-platform-tools.cf.updateDbAfterLoad": "always",
+  "1c-platform-tools.test.selectedExtensions": [
+    "yaxunit",
+    "yaxunit-tests"
+  ]
 }
