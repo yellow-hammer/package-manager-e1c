@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   test:
     uses: ./.github/workflows/check.yml
@@ -17,42 +21,80 @@ jobs:
     needs: test
     runs-on: ubuntu-22.04
     steps:
+      # Полная история и теги нужны git-cliff для сборки журнала изменений.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Version совпадает с тегом
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(sed -n 's/.*<Version>\([^<]*\)<\/Version>.*/\1/p' src/cfe/package-manager/Configuration.xml | head -1)"
+          if [ "$version" != "$tag" ]; then
+            echo "Version ${version} не совпадает с тегом ${tag}"
+            exit 1
+          fi
 
       - uses: actions/download-artifact@v4
         with:
           name: package
           path: build/out/cfe
 
-      - name: Version и тег
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+
+      - name: Кэш cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+          key: ${{ runner.os }}-cargo-git-cliff
+          restore-keys: |
+            ${{ runner.os }}-cargo-git-cliff
+
+      - name: Установить git-cliff
+        run: |
+          if ! command -v git-cliff &> /dev/null; then
+            cargo install git-cliff --locked
+          fi
+          git-cliff --version
+
+      - name: Сгенерировать CHANGELOG
+        id: changelog
         run: |
           set -euo pipefail
-          tag="${GITHUB_REF_NAME#v}"
-          version="$(sed -n 's/.*<Version>\([^<]*\)<\/Version>.*/\1/p' src/cfe/package-manager/Configuration.xml | head -1)"
-          if [ "$version" != "$tag" ]; then
-            echo "Version ${version} != тег ${tag}"
-            exit 1
+          git-cliff --config cliff.toml --output CHANGELOG.md
+
+          # В текст релиза идет только раздел текущей версии.
+          NOTES="$(awk '/^## \[/ { if (found) exit; found = 1 } found { print }' CHANGELOG.md)"
+          {
+            echo 'notes<<NOTES_EOF'
+            echo "$NOTES"
+            echo NOTES_EOF
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Закоммитить CHANGELOG
+        run: |
+          set -euo pipefail
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git checkout main
+          git add CHANGELOG.md
+          if git diff --staged --quiet; then
+            echo "CHANGELOG.md без изменений"
+          else
+            git commit -m "chore(release): обновили журнал изменений"
+            git push origin main
           fi
-          sha="$(cat build/out/cfe/package-manager.srcsha)"
-          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            mkdir -p /tmp/pm-sha
-            if gh release download "$GITHUB_REF_NAME" --pattern package-manager.srcsha --dir /tmp/pm-sha 2>/dev/null; then
-              remote="$(tr -d '[:space:]' < /tmp/pm-sha/package-manager.srcsha)"
-              if [ "$remote" = "$sha" ]; then
-                echo "Источники не менялись"
-                exit 0
-              fi
-              echo "Версия ${version} уже опубликована с другой суммой исходников"
-              exit 1
-            fi
-          fi
-          gh release create "$GITHUB_REF_NAME" \
-            build/out/cfe/package-manager.cfe \
-            build/out/cfe/package-manager.srcsha \
-            --title "$GITHUB_REF_NAME" --generate-notes --fail-on-existing || \
-          gh release upload "$GITHUB_REF_NAME" \
-            build/out/cfe/package-manager.cfe \
-            build/out/cfe/package-manager.srcsha \
-            --clobber
+
+      - name: Создать релиз
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/out/cfe/package-manager.cfe
+          body: ${{ steps.changelog.outputs.notes }}
