@@ -75,11 +75,14 @@ jobs:
           xvfb-run -a vrunner run --command "RunUnitTests=./tools/yaxunit.json" \
             --settings env.json --ordinaryapp false --v8version "$ONEC_VERSION_MASK"
 
+      # CheckConfig идет через Конфигуратор (1cv8), не через ibcmd:
+      # без дисплея платформа падает с GTK+/DISPLAY.
       - name: Синтакс-контроль
         run: |
           set -euo pipefail
           export PATH="${ONEC_BIN}:${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
-          vrunner syntax-check --settings env.json --ibcmd --v8version "$ONEC_VERSION_MASK"
+          mkdir -p build/out/syntax-check
+          xvfb-run -a vrunner syntax-check --settings env.json --v8version "$ONEC_VERSION_MASK"
 
       - name: Собрать cfe
         if: matrix.build
@@ -87,7 +90,7 @@ jobs:
           set -euo pipefail
           export PATH="${ONEC_BIN}:${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
           mkdir -p build/out/cfe
-          vrunner compileexttocfe --ibcmd --settings env.json --v8version "$ONEC_VERSION_MASK" \
+          xvfb-run -a vrunner compileexttocfe --ibcmd --settings env.json --v8version "$ONEC_VERSION_MASK" \
             --src src/cfe/package-manager \
             --out build/out/cfe/package-manager.cfe
           git rev-parse HEAD:src/cfe/package-manager > build/out/cfe/package-manager.srcsha
