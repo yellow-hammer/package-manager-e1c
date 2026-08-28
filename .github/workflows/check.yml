@@ -11,14 +11,37 @@ concurrency:
   group: check-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  # Версия не фиксируется: берется самая новая доступная учетной записи.
-  ONEC_MIN_VERSION: "8.3.23"
+# Проверкам нужно только читать репозиторий.
+permissions:
+  contents: read
 
 jobs:
   test:
+    name: Проверки на ${{ matrix.title }}
     runs-on: ubuntu-22.04
-    timeout-minutes: 90
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Исходники выгружены в формате 2.20 — его читает платформа
+          # с 8.3.27. Режим совместимости расширения по-прежнему 8.3.23:
+          # собранный .cfe должен применяться и к более старым базам.
+          - id: min
+            title: 8.3 минимальная
+            series: '8\.3'
+            min_version: "8.3.27"
+            pick: oldest
+            build: true
+          # Самая новая доступная. Серии 8.3 и 8.5: пока подписка не отдает
+          # 8.5, берется новейшая 8.3, а как появится - переключится сама.
+          - id: latest
+            title: последняя доступная
+            series: '8\.[35]'
+            min_version: "8.3.27"
+            pick: newest
+            build: false
+
     steps:
       - uses: actions/checkout@v4
 
@@ -26,40 +49,45 @@ jobs:
         env:
           YARD_RELEASES_USER: ${{ secrets.ONEC_LOGIN }}
           YARD_RELEASES_PWD: ${{ secrets.ONEC_PASSWORD }}
-          ONEC_MIN_VERSION: ${{ env.ONEC_MIN_VERSION }}
+          ONEC_SERIES: ${{ matrix.series }}
+          ONEC_MIN_VERSION: ${{ matrix.min_version }}
+          ONEC_PICK: ${{ matrix.pick }}
 
       - name: Vanessa-runner
         run: opm install -l vanessa-runner
 
+      # Версию платформы задает установщик: в env.json она зафиксирована
+      # для локальной работы и матрице не подходит.
       - name: ИБ и расширения
         run: |
           set -euo pipefail
-          export PATH="${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
-          vrunner init-dev --src src/cf --settings env.json --ibcmd
-          vrunner compileext src/cfe/package-manager package-manager --updatedb --settings env.json --ibcmd
-          vrunner compileext tests/cfe/yaxunit YAXUNIT --updatedb --settings env.json --ibcmd
-          vrunner compileext tests/cfe/yaxunit-tests YAXUNIT-tests --updatedb --settings env.json --ibcmd
+          export PATH="${ONEC_BIN}:${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
+          vrunner init-dev --src src/cf --settings env.json --ibcmd --v8version "$ONEC_VERSION_MASK"
+          vrunner compileext src/cfe/package-manager package-manager --updatedb --settings env.json --ibcmd --v8version "$ONEC_VERSION_MASK"
+          vrunner compileext tests/cfe/yaxunit YAXUNIT --updatedb --settings env.json --ibcmd --v8version "$ONEC_VERSION_MASK"
+          vrunner compileext tests/cfe/yaxunit-tests YAXUNIT-tests --updatedb --settings env.json --ibcmd --v8version "$ONEC_VERSION_MASK"
 
       - name: YAxUnit
         run: |
           set -euo pipefail
-          export PATH="${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
+          export PATH="${ONEC_BIN}:${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
           mkdir -p build/out/yaxunit
           xvfb-run -a vrunner run --command "RunUnitTests=./tools/yaxunit.json" \
-            --settings env.json --ordinaryapp false
+            --settings env.json --ordinaryapp false --v8version "$ONEC_VERSION_MASK"
 
       - name: Синтакс-контроль
         run: |
           set -euo pipefail
-          export PATH="${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
-          vrunner syntax-check --settings env.json --ibcmd
+          export PATH="${ONEC_BIN}:${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
+          vrunner syntax-check --settings env.json --ibcmd --v8version "$ONEC_VERSION_MASK"
 
       - name: Собрать cfe
+        if: matrix.build
         run: |
           set -euo pipefail
-          export PATH="${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
+          export PATH="${ONEC_BIN}:${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
           mkdir -p build/out/cfe
-          vrunner compileexttocfe --ibcmd --settings env.json \
+          vrunner compileexttocfe --ibcmd --settings env.json --v8version "$ONEC_VERSION_MASK" \
             --src src/cfe/package-manager \
             --out build/out/cfe/package-manager.cfe
           git rev-parse HEAD:src/cfe/package-manager > build/out/cfe/package-manager.srcsha
@@ -67,10 +95,11 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: yaxunit
+          name: yaxunit-${{ matrix.id }}
           path: build/out/yaxunit/
 
       - uses: actions/upload-artifact@v4
+        if: matrix.build
         with:
           name: package
           path: |

@@ -37,3 +37,46 @@ runs:
     - name: Платформа
       shell: bash
       run: oscript .github/scripts/install-onec.os
+
+    # PATH и переменные пишем из bash и срезаем \r: OneScript
+    # ЗаписьТекста часто оставляет CRLF, и GitHub кладёт его в значение.
+    - name: Каталог платформы в PATH
+      shell: bash
+      run: |
+        set -euo pipefail
+        strip_cr() { printf '%s' "$1" | tr -d '\r'; }
+        IBCMD="$(strip_cr "${IBCMD:-}")"
+        ONEC_BIN="$(strip_cr "${ONEC_BIN:-}")"
+        ONEC_VERSION_USED="$(strip_cr "${ONEC_VERSION_USED:-}")"
+        ONEC_VERSION_MASK="$(strip_cr "${ONEC_VERSION_MASK:-}")"
+        if [ -z "$ONEC_BIN" ] || [ -z "$IBCMD" ]; then
+          echo "install-onec.os не выставил ONEC_BIN/IBCMD"
+          exit 1
+        fi
+        {
+          echo "IBCMD=$IBCMD"
+          echo "ONEC_BIN=$ONEC_BIN"
+          echo "ONEC_VERSION_USED=$ONEC_VERSION_USED"
+          echo "ONEC_VERSION_MASK=$ONEC_VERSION_MASK"
+        } >> "$GITHUB_ENV"
+        echo "$ONEC_BIN" >> "$GITHUB_PATH"
+        echo "Платформа: $IBCMD"
+        if [ ! -x "$IBCMD" ]; then
+          echo "ibcmd нет или не исполняемый: [$IBCMD]"
+          ls -la "$(dirname "$IBCMD")" || true
+          exit 1
+        fi
+        if [ ! -e "$ONEC_BIN/1cv8" ]; then
+          echo "нет 1cv8 в $ONEC_BIN — vrunner run не найдет предприятие"
+          ls -la "$ONEC_BIN" || true
+          exit 1
+        fi
+        case "$ONEC_BIN" in
+          *8.[0-9]*.[0-9]*.[0-9]*) ;;
+          *)
+            echo "ONEC_BIN без четырехчастной версии, vrunner не разберет путь: $ONEC_BIN"
+            exit 1
+            ;;
+        esac
+        ls -l /opt/1C/v8.3/x86_64/ibcmd
+        ls -l "$ONEC_BIN/1cv8"
