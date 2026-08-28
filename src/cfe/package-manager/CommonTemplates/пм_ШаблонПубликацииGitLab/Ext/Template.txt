@@ -1,4 +1,4 @@
-﻿# Публикация пакетов из pm-packages.json. Логика — ci/publish-packages.os.
+﻿# Публикация пакетов из pm-packages.json. Логика — tools/ci/publish-packages.os.
 # Срабатывает только на тег. Скрипт сам проверяет, что коммит тега уже
 # в ветке релиза: ветка задается PM_RELEASE_BRANCH, по умолчанию main.
 
@@ -10,13 +10,19 @@ variables:
   # Полная история: без нее не проверить, что тег стоит на ветке релиза.
   GIT_DEPTH: 0
 
+# Windows shell-раннер: без UTF-8 логи opm/oscript приходят кракозябрами.
+default:
+  before_script:
+    - chcp 65001 | Out-Null
+    - $OutputEncoding = [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+
 publish:
   stage: package
   rules:
     - if: $CI_COMMIT_TAG
   script:
     - opm install -l vanessa-runner
-    - oscript ci/publish-packages.os
+    - oscript -encoding=utf-8 tools/ci/publish-packages.os
 
 create_release:
   stage: package
@@ -26,4 +32,4 @@ create_release:
     - publish
   script:
     - opm install -l 1commands
-    - oscript ci/publish-packages.os --release
+    - oscript -encoding=utf-8 tools/ci/publish-packages.os --release
