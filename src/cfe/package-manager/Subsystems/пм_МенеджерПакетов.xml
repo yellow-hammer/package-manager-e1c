@@ -14,15 +14,12 @@
 			<IncludeInCommandInterface>true</IncludeInCommandInterface>
 			<UseOneCommand>false</UseOneCommand>
 			<Explanation/>
-			<Picture/>
+			<Picture>
+				<xr:Ref>CommonPicture.пм_МенеджерПакетов</xr:Ref>
+				<xr:LoadTransparent>false</xr:LoadTransparent>
+			</Picture>
 			<Content>
-				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.пм_Внимание</xr:Item>
-				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.пм_ГруппаПакетов</xr:Item>
-				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.пм_ДлительнаяОперация48</xr:Item>
-				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.пм_Информация24</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.пм_МенеджерПакетов</xr:Item>
-				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.пм_Обновить</xr:Item>
-				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.пм_Скачать</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonTemplate.пм_ШаблонПубликацииGitLab</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonTemplate.пм_ШаблонПубликацииJenkins</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonTemplate.пм_ШаблонПубликацииGitHub</xr:Item>

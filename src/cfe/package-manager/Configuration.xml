@@ -82,13 +82,7 @@
 		<ChildObjects>
 			<Language>Русский</Language>
 			<Subsystem>пм_МенеджерПакетов</Subsystem>
-			<CommonPicture>пм_Внимание</CommonPicture>
-			<CommonPicture>пм_ГруппаПакетов</CommonPicture>
-			<CommonPicture>пм_ДлительнаяОперация48</CommonPicture>
-			<CommonPicture>пм_Информация24</CommonPicture>
 			<CommonPicture>пм_МенеджерПакетов</CommonPicture>
-			<CommonPicture>пм_Обновить</CommonPicture>
-			<CommonPicture>пм_Скачать</CommonPicture>
 			<SessionParameter>пм_ПараметрыКлиентаНаСервере</SessionParameter>
 			<Role>пм_РаботаСМенеджеромПакетов</Role>
 			<Role>пм_ЧтениеИсточниковПакетов</Role>
