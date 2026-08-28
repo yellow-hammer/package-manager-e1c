@@ -58,6 +58,8 @@ jobs:
 
       # Версию платформы задает установщик: в env.json она зафиксирована
       # для локальной работы и матрице не подходит.
+      # Безопасный режим у расширений снимается сразу: иначе YAxUnit
+      # не сможет писать отчет на диск.
       - name: ИБ и расширения
         run: |
           set -euo pipefail
@@ -66,23 +68,83 @@ jobs:
           vrunner compileext src/cfe/package-manager package-manager --updatedb --settings env.json --ibcmd --v8version "$ONEC_VERSION_MASK"
           vrunner compileext tests/cfe/yaxunit YAXUNIT --updatedb --settings env.json --ibcmd --v8version "$ONEC_VERSION_MASK"
           vrunner compileext tests/cfe/yaxunit-tests YAXUNIT-tests --updatedb --settings env.json --ibcmd --v8version "$ONEC_VERSION_MASK"
+          for ext in package-manager YAXUNIT YAXUNIT-tests; do
+            ibcmd infobase config extension update --db-path="$GITHUB_WORKSPACE/build/ib" \
+              --name="$ext" --safe-mode=no --unsafe-action-protection=no
+          done
 
+      # Клиентской лицензии на раннере нет. Файловый запуск (/F) без нее
+      # не стартует: клиент проверяет цифровую подпись конфигурации и выходит.
+      # Через автономный сервер (ibsrv + /WS) тонкий клиент работает - так
+      # гоняет тесты CI самого YAxUnit. Сервер живет только внутри шага:
+      # дальше ibcmd потребуется исключительная блокировка базы.
       - name: YAxUnit
         run: |
           set -euo pipefail
-          export PATH="${ONEC_BIN}:${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
+          export PATH="${ONEC_BIN}:$PATH"
           mkdir -p build/out/yaxunit
-          xvfb-run -a vrunner run --command "RunUnitTests=./tools/yaxunit.json" \
-            --settings env.json --ordinaryapp false --v8version "$ONEC_VERSION_MASK"
+          ibsrv --db-path="$GITHUB_WORKSPACE/build/ib" --port=8314 --disable-direct-gate &
+          IBSRV_PID=$!
+          # Дождаться завершения обязательно: следующим шагам ibcmd нужна
+          # исключительная блокировка базы.
+          trap 'kill "$IBSRV_PID" 2>/dev/null || true; wait "$IBSRV_PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 30); do
+            curl -s http://127.0.0.1:8314/ >/dev/null 2>&1 && break
+            sleep 2
+          done
+          xvfb-run -a 1cv8c /WS http://127.0.0.1:8314 \
+            /C"RunUnitTests=./tools/yaxunit.json" /Lru \
+            /DisableStartupDialogs /DisableStartupMessages /DisableUnrecoverableErrorMessage \
+            /Out build/out/yaxunit/client.log || true
 
-      # CheckConfig идет через Конфигуратор (1cv8), не через ibcmd:
-      # без дисплея платформа падает с GTK+/DISPLAY.
-      - name: Синтакс-контроль
+      # YAxUnit возвращает ноль и тогда, когда тестовый модуль не смог
+      # скомпилироваться и молча выпал из прогона. Поэтому отчет сверяется
+      # со списком модулей на диске, а лог читается на ошибки загрузки.
+      - name: Отчет YAxUnit
         run: |
           set -euo pipefail
-          export PATH="${ONEC_BIN}:${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
-          mkdir -p build/out/syntax-check
-          xvfb-run -a vrunner syntax-check --settings env.json --v8version "$ONEC_VERSION_MASK"
+          report=build/out/yaxunit/junit.xml
+          result=build/out/yaxunit/result.txt
+          log=build/out/yaxunit/log.txt
+          if [ ! -f "$result" ] || [ ! -f "$report" ]; then
+            echo "Отчет не создан - тесты не выполнялись"
+            cat build/out/yaxunit/client.log 2>/dev/null || true
+            exit 1
+          fi
+          if [ -f "$log" ] && grep -q "Ошибка инициализации" "$log"; then
+            echo "Часть тестовых модулей не загрузилась:"
+            grep -A 4 "Ошибка инициализации" "$log"
+            exit 1
+          fi
+          missing=0
+          for xml in tests/cfe/yaxunit-tests/CommonModules/*.xml; do
+            module="$(basename "$xml" .xml)"
+            if ! grep -q "name=\"$module " "$report"; then
+              echo "Модуль $module не попал в отчет - его тесты не выполнялись"
+              missing=1
+            fi
+          done
+          [ "$missing" -eq 0 ]
+          # В файле кода возврата BOM, поэтому берутся только цифры.
+          code="$(grep -o '[0-9-]*' "$result" | head -1)"
+          if [ "$code" != "0" ]; then
+            echo "YAxUnit вернул код $code"
+            exit 1
+          fi
+          echo "Наборы в отчете:"
+          grep -o 'testsuite name="[^"]*" tests="[0-9]*"' "$report" || true
+
+      # Синтакс-контроль Конфигуратором в CI невозможен: 1cv8 без лицензии
+      # не работает. Метаданные проверяет ibcmd, синтаксис модулей в обоих
+      # контекстах - компиляция при прогоне тестов выше. Полный контроль
+      # (vrunner syntax-check) идет локально, где лицензия есть.
+      - name: Проверка метаданных
+        run: |
+          set -euo pipefail
+          export PATH="${ONEC_BIN}:$PATH"
+          ibcmd config check --db-path="$GITHUB_WORKSPACE/build/ib"
+          ibcmd config check --db-path="$GITHUB_WORKSPACE/build/ib" --extension=package-manager
+          ibcmd config check --db-path="$GITHUB_WORKSPACE/build/ib" --extension=YAXUNIT-tests
 
       - name: Собрать cfe
         if: matrix.build
@@ -90,7 +152,7 @@ jobs:
           set -euo pipefail
           export PATH="${ONEC_BIN}:${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
           mkdir -p build/out/cfe
-          xvfb-run -a vrunner compileexttocfe --ibcmd --settings env.json --v8version "$ONEC_VERSION_MASK" \
+          vrunner compileexttocfe --ibcmd --settings env.json --v8version "$ONEC_VERSION_MASK" \
             --src src/cfe/package-manager \
             --out build/out/cfe/package-manager.cfe
           git rev-parse HEAD:src/cfe/package-manager > build/out/cfe/package-manager.srcsha
