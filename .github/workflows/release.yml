@@ -16,6 +16,9 @@ jobs:
   test:
     uses: ./.github/workflows/check.yml
     secrets: inherit
+    permissions:
+      contents: read
+      packages: read
 
   publish:
     needs: test

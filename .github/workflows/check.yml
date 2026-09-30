@@ -11,15 +11,25 @@ concurrency:
   group: check-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Проверкам нужно только читать репозиторий.
+# Проверкам нужно читать репозиторий и образ платформы.
 permissions:
   contents: read
+  packages: read
 
 jobs:
   test:
     name: Проверки на ${{ matrix.title }}
-    runs-on: ubuntu-22.04
-    timeout-minutes: 120
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    # Платформа, OneScript и vanessa-runner 2 из образа yellow-hammer/1c-nest.
+    # Шаги идут от root, поэтому vrunner тоже остаётся под root.
+    container:
+      image: ghcr.io/yellow-hammer/1c-nest/vrunner:${{ matrix.platform }}-vrunner2
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        ONEC_NEST_AS_OWNER: '0'
     strategy:
       fail-fast: false
       matrix:
@@ -29,45 +39,27 @@ jobs:
           # собранный .cfe должен применяться и к более старым базам.
           - id: min
             title: 8.3 минимальная
-            series: '8\.3'
-            min_version: "8.3.27"
-            pick: oldest
+            platform: 8.3.27.1508
             build: true
-          # Самая новая доступная. Серии 8.3 и 8.5: пока подписка не отдает
-          # 8.5, берется новейшая 8.3, а как появится - переключится сама.
           - id: latest
-            title: последняя доступная
-            series: '8\.[35]'
-            min_version: "8.3.27"
-            pick: newest
+            title: 8.5 последняя
+            platform: '8.5.1'
             build: false
 
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/setup-onec
-        env:
-          YARD_RELEASES_USER: ${{ secrets.ONEC_LOGIN }}
-          YARD_RELEASES_PWD: ${{ secrets.ONEC_PASSWORD }}
-          ONEC_SERIES: ${{ matrix.series }}
-          ONEC_MIN_VERSION: ${{ matrix.min_version }}
-          ONEC_PICK: ${{ matrix.pick }}
-
-      - name: Vanessa-runner
-        run: opm install -l vanessa-runner
-
-      # Версию платформы задает установщик: в env.json она зафиксирована
+      # Версию платформы задаёт образ: в env.json она зафиксирована
       # для локальной работы и матрице не подходит.
       # Безопасный режим у расширений снимается сразу: иначе YAxUnit
       # не сможет писать отчет на диск.
       - name: ИБ и расширения
         run: |
           set -euo pipefail
-          export PATH="${ONEC_BIN}:${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
-          vrunner init-dev --src src/cf --settings env.json --ibcmd --v8version "$ONEC_VERSION_MASK"
-          vrunner compileext src/cfe/package-manager package-manager --updatedb --settings env.json --ibcmd --v8version "$ONEC_VERSION_MASK"
-          vrunner compileext tests/cfe/yaxunit YAXUNIT --updatedb --settings env.json --ibcmd --v8version "$ONEC_VERSION_MASK"
-          vrunner compileext tests/cfe/yaxunit-tests YAXUNIT-tests --updatedb --settings env.json --ibcmd --v8version "$ONEC_VERSION_MASK"
+          vrunner init-dev --src src/cf --settings env.json --ibcmd --v8version "$ONEC_VERSION"
+          vrunner compileext src/cfe/package-manager package-manager --updatedb --settings env.json --ibcmd --v8version "$ONEC_VERSION"
+          vrunner compileext tests/cfe/yaxunit YAXUNIT --updatedb --settings env.json --ibcmd --v8version "$ONEC_VERSION"
+          vrunner compileext tests/cfe/yaxunit-tests YAXUNIT-tests --updatedb --settings env.json --ibcmd --v8version "$ONEC_VERSION"
           for ext in package-manager YAXUNIT YAXUNIT-tests; do
             ibcmd infobase config extension update --db-path="$GITHUB_WORKSPACE/build/ib" \
               --name="$ext" --safe-mode=no --unsafe-action-protection=no
@@ -81,7 +73,6 @@ jobs:
       - name: YAxUnit
         run: |
           set -euo pipefail
-          export PATH="${ONEC_BIN}:$PATH"
           mkdir -p build/out/yaxunit
           ibsrv --db-path="$GITHUB_WORKSPACE/build/ib" --port=8314 --disable-direct-gate &
           IBSRV_PID=$!
@@ -141,7 +132,6 @@ jobs:
       - name: Проверка метаданных
         run: |
           set -euo pipefail
-          export PATH="${ONEC_BIN}:$PATH"
           ibcmd config check --db-path="$GITHUB_WORKSPACE/build/ib"
           ibcmd config check --db-path="$GITHUB_WORKSPACE/build/ib" --extension=package-manager
           ibcmd config check --db-path="$GITHUB_WORKSPACE/build/ib" --extension=YAXUNIT-tests
@@ -150,9 +140,8 @@ jobs:
         if: matrix.build
         run: |
           set -euo pipefail
-          export PATH="${ONEC_BIN}:${GITHUB_WORKSPACE}/oscript_modules/bin:$PATH"
           mkdir -p build/out/cfe
-          vrunner compileexttocfe --ibcmd --settings env.json --v8version "$ONEC_VERSION_MASK" \
+          vrunner compileexttocfe --ibcmd --settings env.json --v8version "$ONEC_VERSION" \
             --src src/cfe/package-manager \
             --out build/out/cfe/package-manager.cfe
 
